@@ -1,3 +1,16 @@
+# app/config/routing.yml
+
+#Dans la clé app, la déclaration a été changée pour dire à Symfony de ne plus charger nos contrôleurs REST, la clé
+#app.resource passe ainsi de @AppBundle/Controller à @AppBundle/Controller/DefaultController.php
+
 app:
-    resource: '@AppBundle/Controller/'
+    resource: '@AppBundle/Controller/DefaultController.php'
     type: annotation
+
+places:
+    type: rest
+    resource: AppBundle\Controller\PlaceController
+
+users:
+    type: rest
+    resource: AppBundle\Controller\UserController

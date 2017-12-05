@@ -1,3 +1,5 @@
+# app/config/config.yml
+
 imports:
     - { resource: parameters.yml }
     - { resource: security.yml }
@@ -32,6 +34,8 @@ framework:
     assets: ~
     php_errors:
         log: true
+    serializer:
+        enabled: true
 
 # Twig Configuration
 twig:
@@ -67,3 +71,20 @@ swiftmailer:
     username: '%mailer_user%'
     password: '%mailer_password%'
     spool: { type: memory }
+
+# On désactive l’ajout automatique de l'attribut _format des routes (FOSRestBundle introduit automatiquement
+#ce paramètre afin de gérer le format des réponses).
+# Puis on active le "listener" (ViewResponseListener) de FOSRestBundle qui permet, à l’instar de Symfony
+# via l’annotation Template du SensioFrameworkExtraBundle, de renvoyer juste une instance de View et laisser
+# le bundle appeler le gestionnaire de vue lui-même.
+# Ensuite configurer le format listener de FOSRestBundle pour que toutes les URL renvoient du JSON.
+fos_rest:
+    routing_loader:
+        include_format: false
+    view:
+        view_response_listener: true
+    format_listener:
+        rules:
+            - { path: '^/', priorities: ['json'], fallback_format: 'json' }
+# ==> pour toutes les URL (path: ^/), le format prioritaire est le JSON (priorities: ['json']) et si aucun format n’est
+# demandé par le client, il faudra utiliser le JSON quand même (fallback_format: 'json').
