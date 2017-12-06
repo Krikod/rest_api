@@ -116,4 +116,32 @@ class UserController extends Controller
             $em->flush();
         }
     }
+
+    /**
+     * @Rest\View(statusCode=Response::HTTP_ACCEPTED)
+     * @Rest\Put("/users/{id}")
+     * @param Request $request
+     */
+    public function putUserAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $user = $em->getRepository('AppBundle:User')
+            ->find($request->get('id'));
+        /* @var $user User */
+
+        if(empty($user)) {
+            return new JsonResponse(['message' => 'User not found'], Response::HTTP_NOT_FOUND);
+        }
+        $form = $this->createForm(UserType::class, $user);
+        $form->submit($request->request->all());
+
+        if ($form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->merge($user);
+            $em->flush();
+            return $user;
+        } else {
+            return $form;
+        }
+    }
 }
