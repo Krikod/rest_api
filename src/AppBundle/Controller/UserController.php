@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\User;
+use AppBundle\Form\UserType;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -68,5 +69,32 @@ class UserController extends Controller
 //        ];
 //
 //        return new JsonResponse($formatted);
+    }
+
+    /**
+     * @Rest\View(statusCode=Response::HTTP_CREATED)
+     * @Rest\Post("/users")
+     * @param Request $request
+     */
+    public function postUsersAction(Request $request)
+    {
+        $user = new User();
+        $form = $this->createForm(UserType::class, $user);
+        $form->submit($request->request->all());
+        // Methode Submit au lieu de HandleRequest (->contraintes REST)
+
+        // Validation des données
+        if ($form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($user);
+            $em->flush();
+
+            return $user;
+
+        } else {
+            // On renvoie le form car le ViewHandler de FOSRestBundle est conçu
+            // pour gérer nativement les formulaires invalides.
+            return $form;
+        }
     }
 }

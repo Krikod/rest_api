@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Form\PlaceType;
 use FOS\RestBundle\Controller\Annotations as Rest; // Alias pour toutes les annotations
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -96,14 +97,30 @@ class PlaceController extends Controller
     public function postPlacesAction(Request $request)
     {
         $place = new Place();
-        $place->setName($request->get('name'))
-            ->setAddress($request->get('address'));
+        $form = $this->createForm(PlaceType::class, $place);
+        $form->submit($request->request->all());
+// Methode Submit au lieu de HandleRequest (->contraintes REST):
+        // http://symfony.com/doc/current/form/direct_submit.html
 
-        $em = $this->getDoctrine()->getManager();
-        $em->persist($place);
-        $em->flush();
+        // Validation des données
+        if ($form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($place);
+            $em->flush();
 
-        return $place;
+            return $place;
+
+        } else {
+            // On renvoie le form car le ViewHandler de FOSRestBundle est conçu
+            // pour gérer nativement les formulaires invalides.
+            return $form;
+        }
+
+
+//        $place->setName($request->get('name'))
+//            ->setAddress($request->get('address'));
+
+
 
         //        Sans le body_listener (=false):
         //        'payload' => json_decode($request->getContent(), true)

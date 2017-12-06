@@ -3,11 +3,12 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-
+# On ajoute une contrainte d'unicité sur le champ name
 /**
  * Place
  *
- * @ORM\Table(name="place")
+ * @ORM\Table(name="place",
+ *     uniqueConstraints={@ORM\UniqueConstraint(name="places_name_unique",columns={"name"})})
  * @ORM\Entity(repositoryClass="AppBundle\Repository\PlaceRepository")
  */
 class Place
