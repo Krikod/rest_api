@@ -88,3 +88,6 @@ fos_rest:
             - { path: '^/', priorities: ['json'], fallback_format: 'json' }
 # ==> pour toutes les URL (path: ^/), le format prioritaire est le JSON (priorities: ['json']) et si aucun format n’est
 # demandé par le client, il faudra utiliser le JSON quand même (fallback_format: 'json').
+# Configuration à ajouter pour désactiver le body listener (=false):
+    body_listener:
+        enabled: true

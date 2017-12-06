@@ -63,6 +63,7 @@ class PlaceController extends Controller
     }
 
     /**
+     * @Rest\View()
      * @Rest\Get("/places/{id}")
      * @param $id
      * @param Request $request
@@ -78,12 +79,39 @@ class PlaceController extends Controller
             return new JsonResponse(['message' => 'Place not found'], Response::HTTP_NOT_FOUND);
         }
 
-        $formatted = [
-          'id' => $place->getId(),
-          'name' => $place->getName(),
-          'address' => $place->getAddress(),
-        ];
-        return new JsonResponse($formatted);
+        return $place;
+//        $formatted = [
+//          'id' => $place->getId(),
+//          'name' => $place->getName(),
+//          'address' => $place->getAddress(),
+//        ];
+//        return new JsonResponse($formatted);
     }
 
+    /**
+     * @Rest\View(statusCode=Response::HTTP_CREATED)
+     * @Rest\Post("/places")
+     * @param Request $request
+     */
+    public function postPlacesAction(Request $request)
+    {
+        $place = new Place();
+        $place->setName($request->get('name'))
+            ->setAddress($request->get('address'));
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($place);
+        $em->flush();
+
+        return $place;
+
+        //        Sans le body_listener (=false):
+        //        'payload' => json_decode($request->getContent(), true)
+//        return [
+//            'payload' => [
+//                $request->get('name'),
+//                $request->get('address')
+//            ]
+//        ];
+    }
 }

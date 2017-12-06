@@ -10,10 +10,13 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+//use FOS\RestBundle\View\ViewHandler; // Service "fos_rest.view_handler" qui permet de gérer les réponses.
+//use FOS\RestBundle\View\View; // Utilisation de la vue de FOSRestBundle
 
 class UserController extends Controller
 {
     /**
+     * @Rest\View()
      * @Rest\Get("/users")
      * @param Request $request
      * @return JsonResponse
@@ -23,20 +26,22 @@ class UserController extends Controller
         $users = $this->getDoctrine()->getRepository(User::class)->findAll();
         /* @var $users User[] */
 
-        $formatted = [];
-        foreach ($users as $user) {
-            $formatted[] = [
-                'id' => $user->getId(),
-                'firstname' => $user->getFirstname(),
-                'lastname' => $user->getLastname(),
-                'email' => $user->getEmail(),
-            ];
-        }
-
-        return new JsonResponse($formatted);
+        return $users;
+//        $formatted = [];
+//        foreach ($users as $user) {
+//            $formatted[] = [
+//                'id' => $user->getId(),
+//                'firstname' => $user->getFirstname(),
+//                'lastname' => $user->getLastname(),
+//                'email' => $user->getEmail(),
+//            ];
+//        }
+//
+//        return new JsonResponse($formatted);
     }
 
     /**
+     * @Rest\View()
      * @Rest\Get("/users/{id}")
      * @param $id
      * @param Request $request
@@ -53,13 +58,15 @@ class UserController extends Controller
             return new JsonResponse(['message' => 'User not found', Response::HTTP_NOT_FOUND]);
         }
 
-        $formatted = [
-            'id' => $user->getId(),
-            'firstname' => $user->getFirstname(),
-            'lastname' => $user->getLastname(),
-            'email' => $user->getEmail(),
-        ];
+        return $user;
 
-        return new JsonResponse($formatted);
+//        $formatted = [
+//            'id' => $user->getId(),
+//            'firstname' => $user->getFirstname(),
+//            'lastname' => $user->getLastname(),
+//            'email' => $user->getEmail(),
+//        ];
+//
+//        return new JsonResponse($formatted);
     }
 }
