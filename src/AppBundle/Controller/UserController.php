@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\AppBundle;
 use AppBundle\Entity\User;
 use AppBundle\Form\UserType;
 use FOS\RestBundle\Controller\Annotations as Rest;
@@ -95,6 +96,24 @@ class UserController extends Controller
             // On renvoie le form car le ViewHandler de FOSRestBundle est conçu
             // pour gérer nativement les formulaires invalides.
             return $form;
+        }
+    }
+
+    /**
+     * @Rest\View(statusCode=Response::HTTP_NO_CONTENT)
+     * @Rest\Delete("/users/{id}")
+     * @param Request $request
+     */
+    public function removeUserAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $user = $em->getRepository('AppBundle:User')
+            ->find($request->get('id'));
+        /* @var $user User */
+
+        if ($user) {
+            $em->remove($user);
+            $em->flush();
         }
     }
 }

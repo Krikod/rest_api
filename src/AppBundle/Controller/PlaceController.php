@@ -2,14 +2,14 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Form\PlaceType;
-use FOS\RestBundle\Controller\Annotations as Rest; // Alias pour toutes les annotations
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use FOS\RestBundle\View\ViewHandler; // Service "fos_rest.view_handler" qui permet de gérer les réponses.
 use FOS\RestBundle\View\View; // Utilisation de la vue de FOSRestBundle
+use FOS\RestBundle\Controller\Annotations as Rest; // Alias pour toutes les annotations
+use AppBundle\Form\PlaceType;
 use AppBundle\Entity\Place;
 
 
@@ -130,5 +130,26 @@ class PlaceController extends Controller
 //                $request->get('address')
 //            ]
 //        ];
+    }
+
+    /**
+     * @Rest\View(statusCode=Response::HTTP_NO_CONTENT)
+     * @Rest\Delete("/places/{id}")
+     * @param Request $request
+     */
+    public function removePlaceAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $place = $em->getRepository('AppBundle:Place')
+            ->find($request->get('id'));
+        /* @var $place Place */
+
+        # Delete doit être une action IDEMPOTENTE: produit le même résultat peu importe
+        # le nombre de fois qu’elle est exécutée -> évite d'avoir une erreur serveur 500 si une donnée
+        #  n'existe pas ou plus.
+        if ($place) {
+            $em->remove($place);
+            $em->flush();
+        }
     }
 }
