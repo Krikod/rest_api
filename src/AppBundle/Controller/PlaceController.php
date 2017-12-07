@@ -154,67 +154,120 @@ class PlaceController extends Controller
     }
 
     /**
-     * @Rest\View(statusCode=Response::HTTP_ACCEPTED)
+     * @Rest\View()
      * @Rest\Put("/places/{id}")
      * @param Request $request
+     * @return mixed
      */
-    public function putPlaceAction(Request $request)
+    public function updatePlaceAction(Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
-        $place = $em->getRepository('AppBundle:Place')
-            ->find($request->get('id')); // L'identifiant en tant que paramètre n'est plus nécessaire
-        /* @var $place Place */
-
-        if(empty($place)) {
-            return new JsonResponse(['message' => 'Place not found'], Response::HTTP_NOT_FOUND);
-        }
-
-        $form = $this->createForm(PlaceType::class, $place);
-        $form->submit($request->request->all());
-
-        if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            // l'entité vient de la base, donc le merge n'est pas nécessaire.
-            // il est utilisé juste par soucis de clarté
-            $em->merge($place);
-            $em->flush();
-            return $place;
-        } else {
-            return $form;
-        }
+        return $this->updatePlace($request, true);
     }
 
     /**
      * @Rest\View()
      * @Rest\Patch("/places/{id}")
      * @param Request $request
+     * @return mixed
      */
-    public function patchPlaceAction(Request $request) {
-        $em = $this->getDoctrine()->getManager();
-        $place = $em->getRepository('AppBundle:Place')
-            ->find($request->get('id')); // L'identifiant en tant que paramètre n'est plus nécessaire
-        /* @var $place Place */
-
-        if(empty($place)) {
-            return new JsonResponse(['message' => 'Place not found'], Response::HTTP_NOT_FOUND);
-        }
-
-        $form = $this->createForm(PlaceType::class, $place);
-
-        // rajouter un paramètre dans la méthode submit (clearMissing = false)
-        // => Symfony conservera tous les attributs de l’entité Place qui ne sont pas présents
-        // dans le payload de la requête.
-        $form->submit($request->request->all(), false);
-
-        if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            // l'entité vient de la base, donc le merge n'est pas nécessaire.
-            // il est utilisé juste par soucis de clarté
-            $em->merge($place);
-            $em->flush();
-            return $place;
-        } else {
-            return $form;
-        }
+    public function patchPlaceAction(Request $request)
+    {
+        return $this->updatePlace($request, false);
     }
+
+    /**
+     * @param Request $request
+     * @param $clearMissing
+     * @return mixed
+     */
+    private function updatePlace(Request $request, $clearMissing)
+    {
+       $em = $this->getDoctrine()->getManager();
+       $place = $em->getRepository('AppBundle:Place')->find($request->get('id'));
+
+       if (empty($place)) {
+           return new JsonResponse(['message' => 'Place not found'], Response::HTTP_NOT_FOUND);
+       }
+
+       $form = $this->createForm(PlaceType::class, $place);
+        // Le paramètre false dit à Symfony de garder les valeurs dans notre
+        // entité si l'utilisateur n'en fournit pas une dans sa requête
+       $form->submit($request->request->all(), $clearMissing);
+
+       if ($form->isValid()) {
+           $em = $this->getDoctrine()->getManager();
+           $em->persist($place);
+           $em->flush();
+           return $place;
+       } else {
+           return $form;
+       }
+    }
+
+//
+//
+//    /**
+//     * @Rest\View(statusCode=Response::HTTP_ACCEPTED)
+//     * @Rest\Put("/places/{id}")
+//     * @param Request $request
+//     */
+//    public function putPlaceAction(Request $request)
+//    {
+//        $em = $this->getDoctrine()->getManager();
+//        $place = $em->getRepository('AppBundle:Place')
+//            ->find($request->get('id')); // L'identifiant en tant que paramètre n'est plus nécessaire
+//        /* @var $place Place */
+//
+//        if(empty($place)) {
+//            return new JsonResponse(['message' => 'Place not found'], Response::HTTP_NOT_FOUND);
+//        }
+//
+//        $form = $this->createForm(PlaceType::class, $place);
+//        $form->submit($request->request->all());
+//
+//        if ($form->isValid()) {
+//            $em = $this->getDoctrine()->getManager();
+//            // l'entité vient de la base, donc le merge n'est pas nécessaire.
+//            // il est utilisé juste par soucis de clarté
+//            $em->merge($place);
+//            $em->flush();
+//            return $place;
+//        } else {
+//            return $form;
+//        }
+//    }
+//
+//    /**
+//     * @Rest\View()
+//     * @Rest\Patch("/places/{id}")
+//     * @param Request $request
+//     */
+//    public function patchPlaceAction(Request $request) {
+//        $em = $this->getDoctrine()->getManager();
+//        $place = $em->getRepository('AppBundle:Place')
+//            ->find($request->get('id')); // L'identifiant en tant que paramètre n'est plus nécessaire
+//        /* @var $place Place */
+//
+//        if(empty($place)) {
+//            return new JsonResponse(['message' => 'Place not found'], Response::HTTP_NOT_FOUND);
+//        }
+//
+//        $form = $this->createForm(PlaceType::class, $place);
+//
+//        // rajouter un paramètre dans la méthode submit (clearMissing = false)
+//        // => Symfony conservera tous les attributs de l’entité Place qui ne sont pas présents
+//        // dans le payload de la requête.
+//        $form->submit($request->request->all(), false);
+//
+//        if ($form->isValid()) {
+//            $em = $this->getDoctrine()->getManager();
+//            // l'entité vient de la base, donc le merge n'est pas nécessaire.
+//            // il est utilisé juste par soucis de clarté
+//            $em->merge($place);
+//            $em->flush();
+//            return $place;
+//        } else {
+//            return $form;
+//        }
+//    }
 }

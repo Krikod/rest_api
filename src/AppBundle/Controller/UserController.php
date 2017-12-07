@@ -118,30 +118,78 @@ class UserController extends Controller
     }
 
     /**
-     * @Rest\View(statusCode=Response::HTTP_ACCEPTED)
+     * @Rest\View()
      * @Rest\Put("/users/{id}")
      * @param Request $request
+     * @return mixed
      */
-    public function putUserAction(Request $request)
+    public function updateUserAction(Request $request)
+    {
+        return $this->updateUser($request, true);
+    }
+
+    /**
+     * @Rest\View()
+     * @Rest\Patch("/users/{id}")
+     * @param Request $request
+     * @return mixed
+     */
+    public function patchUserAction(Request $request)
+    {
+        return $this->updateUser($request, false);
+    }
+
+    /**
+     * @param Request $request
+     * @param $clearMissing
+     * @return mixed
+     */
+    private function updateUser(Request $request, $clearMissing)
     {
         $em = $this->getDoctrine()->getManager();
-        $user = $em->getRepository('AppBundle:User')
-            ->find($request->get('id'));
-        /* @var $user User */
+        $user = $em->getRepository('AppBundle:User')->find($request->get('id'));
 
-        if(empty($user)) {
+        if (empty($user)) {
             return new JsonResponse(['message' => 'User not found'], Response::HTTP_NOT_FOUND);
         }
+
         $form = $this->createForm(UserType::class, $user);
-        $form->submit($request->request->all());
+        $form->submit($request->request->all(), $clearMissing);
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $em->merge($user);
+            $em->persist($user);
             $em->flush();
             return $user;
         } else {
             return $form;
         }
     }
+//    /**
+//     * @Rest\View(statusCode=Response::HTTP_ACCEPTED)
+//     * @Rest\Put("/users/{id}")
+//     * @param Request $request
+//     */
+//    public function putUserAction(Request $request)
+//    {
+//        $em = $this->getDoctrine()->getManager();
+//        $user = $em->getRepository('AppBundle:User')
+//            ->find($request->get('id'));
+//        /* @var $user User */
+//
+//        if(empty($user)) {
+//            return new JsonResponse(['message' => 'User not found'], Response::HTTP_NOT_FOUND);
+//        }
+//        $form = $this->createForm(UserType::class, $user);
+//        $form->submit($request->request->all());
+//
+//        if ($form->isValid()) {
+//            $em = $this->getDoctrine()->getManager();
+//            $em->merge($user);
+//            $em->flush();
+//            return $user;
+//        } else {
+//            return $form;
+//        }
+//    }
 }
