@@ -10,8 +10,7 @@ AppBundle\Entity\Place:
         address:
             - NotBlank: ~
             - Type: string
-
-# => Ajouter la contrainte UniqueEntity en annotation dans l'Entity Place
+# => Ajouter la contrainte UniqueEntity "name" en annotation dans l'Entity Place
 
 AppBundle\Entity\User:
     constraints:
@@ -26,5 +25,17 @@ AppBundle\Entity\User:
         email:
             - NotBlank: ~
             - Email: ~
-
 # => On ajoute la contrainte UniqueEntity "email" en annotation dans l'Entity User
+
+# Règles de validation pour la création d'un prix
+AppBundle\Entity\Price:
+    properties:
+        type:
+            - NotNull: ~
+            - Choice:
+                choices: [less_than_12, for_all]
+        value:
+            - NotNull: ~
+            - Type: numeric
+            - GreaterThanOrEqual:
+                value: 0

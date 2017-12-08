@@ -23,7 +23,7 @@ class PlaceController extends Controller
      */
     public function getPlacesAction (Request $request)
     {
-        $places = $this->getDoctrine()->getRepository(Place::class)->findAll();
+        $places = $this->getDoctrine()->getRepository('AppBundle:Place')->findAll();
         /* @var $places Place[] */
 // Vu que maintenant nous n’avons plus à définir le format dans les actions de nos contrôleurs, nous avons même la
 // possibilité de renvoyer directement nos objets sans utiliser l’objet View de FOSRestBundle.
@@ -72,7 +72,7 @@ class PlaceController extends Controller
      */
     public function getPlaceAction($id, Request $request)
     {
-        $repository = $this->getDoctrine()->getRepository(Place::class);
+        $repository = $this->getDoctrine()->getManager()->getRepository('AppBundle:Place');
         $place = $repository->find($id);
         /* @var $place \AppBundle\Entity\Place */
 
@@ -107,9 +107,7 @@ class PlaceController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->persist($place);
             $em->flush();
-
             return $place;
-
         } else {
             // On renvoie le form car le ViewHandler de FOSRestBundle est conçu
             // pour gérer nativement les formulaires invalides.
@@ -186,12 +184,16 @@ class PlaceController extends Controller
        $place = $em->getRepository('AppBundle:Place')->find($request->get('id'));
 
        if (empty($place)) {
-           return new JsonResponse(['message' => 'Place not found'], Response::HTTP_NOT_FOUND);
+           // Au lieu de renvoyer une réponse JSON, on va juste renvoyer une vue FOSRestBundle et laisser
+           // le view handler le formater en JSON -> on pourra + tard changer le format des réponses(XML..).
+           return View::create(['message' => 'Place not found'], Response::HTTP_NOT_FOUND);
+            // Utilisation d'un objet JsonResponse qd ressource recherchée n’existe pas:
+            //           return new JsonResponse(['message' => 'Place not found'], Response::HTTP_NOT_FOUND);
        }
 
        $form = $this->createForm(PlaceType::class, $place);
-        // Le paramètre false dit à Symfony de garder les valeurs dans notre
-        // entité si l'utilisateur n'en fournit pas une dans sa requête
+        // Le param false dit à Symfony de garder les valeurs dans l'entité si l'utilisateur n'en fournit pas une
+        // dans sa requête.
        $form->submit($request->request->all(), $clearMissing);
 
        if ($form->isValid()) {
@@ -271,3 +273,4 @@ class PlaceController extends Controller
 //        }
 //    }
 }
+

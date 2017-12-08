@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 # On ajoute une contrainte d'unicité sur le champ name
 /**
@@ -20,21 +21,32 @@ class Place
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255)
      */
-    private $name;
+    protected $name;
 
     /**
      * @var string
      *
      * @ORM\Column(name="address", type="string", length=255)
      */
-    private $address;
+    protected $address;
+
+    /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Price", mappedBy="place")
+     * @var Price[]
+     */
+    protected $prices;
+
+    public function __construct()
+    {
+        $this->prices = new ArrayCollection();
+    }
 
 
     /**

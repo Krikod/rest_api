@@ -2,18 +2,15 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\AppBundle;
 use AppBundle\Entity\User;
 use AppBundle\Form\UserType;
 use FOS\RestBundle\Controller\Annotations as Rest;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-//use FOS\RestBundle\View\ViewHandler; // Service "fos_rest.view_handler" qui permet de gérer les réponses.
-//use FOS\RestBundle\View\View; // Utilisation de la vue de FOSRestBundle
+use FOS\RestBundle\View\ViewHandler; // Service "fos_rest.view_handler" qui permet de gérer les réponses.
+use FOS\RestBundle\View\View; // Utilisation de la vue de FOSRestBundle
 
 class UserController extends Controller
 {
@@ -25,7 +22,7 @@ class UserController extends Controller
      */
     public function getUsersAction(Request $request)
     {
-        $users = $this->getDoctrine()->getRepository(User::class)->findAll();
+        $users = $this->getDoctrine()->getRepository('AppBundle:User')->findAll();
         /* @var $users User[] */
 
         return $users;
@@ -50,7 +47,7 @@ class UserController extends Controller
      * @return JsonResponse
      */
     public function getUserAction($id, Request $request) {
-        $user = $this->getDoctrine()->getRepository(User::class)
+        $user = $this->getDoctrine()->getRepository('AppBundle:User')
             ->find($id);
         /* @var $user User */
 
@@ -150,7 +147,8 @@ class UserController extends Controller
         $user = $em->getRepository('AppBundle:User')->find($request->get('id'));
 
         if (empty($user)) {
-            return new JsonResponse(['message' => 'User not found'], Response::HTTP_NOT_FOUND);
+            return View::create(['message' => 'Place not found'], Response::HTTP_NOT_FOUND);
+//            return new JsonResponse(['message' => 'User not found'], Response::HTTP_NOT_FOUND);
         }
 
         $form = $this->createForm(UserType::class, $user);
