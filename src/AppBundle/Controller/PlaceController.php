@@ -16,7 +16,7 @@ use AppBundle\Entity\Place;
 class PlaceController extends Controller
 {
     /**
-     * @Rest\View()
+     * @Rest\View(serializerGroups={"place"})
      * @Rest\Get("/places")
      * @param Request $request
      * @return JsonResponse
@@ -64,7 +64,7 @@ class PlaceController extends Controller
     }
 
     /**
-     * @Rest\View()
+     * @Rest\View(serializerGroups={"place"})
      * @Rest\Get("/places/{id}")
      * @param $id
      * @param Request $request
@@ -90,7 +90,7 @@ class PlaceController extends Controller
     }
 
     /**
-     * @Rest\View(statusCode=Response::HTTP_CREATED)
+     * @Rest\View(statusCode=Response::HTTP_CREATED, serializerGroups={"place"})
      * @Rest\Post("/places")
      * @param Request $request
      */
@@ -131,7 +131,7 @@ class PlaceController extends Controller
     }
 
     /**
-     * @Rest\View(statusCode=Response::HTTP_NO_CONTENT)
+     * @Rest\View(statusCode=Response::HTTP_NO_CONTENT, serializerGroups={"place"})
      * @Rest\Delete("/places/{id}")
      * @param Request $request
      */
@@ -152,7 +152,7 @@ class PlaceController extends Controller
     }
 
     /**
-     * @Rest\View()
+     * @Rest\View(serializerGroups={"place"})
      * @Rest\Put("/places/{id}")
      * @param Request $request
      * @return mixed
@@ -163,7 +163,7 @@ class PlaceController extends Controller
     }
 
     /**
-     * @Rest\View()
+     * @Rest\View(serializerGroups={"place"})
      * @Rest\Patch("/places/{id}")
      * @param Request $request
      * @return mixed
