@@ -1,14 +1,21 @@
 # src/AppBundle/Resources/config/serialization.yml
 
+# Pour éviter l'erreur 500 "A circular reference has been detected (configured limit: 1)" du Serializer Symfony
+# (en créant un prix, le sérialiseur tente de transformer le lieu contenu dans notre objet. Ce lieu contient
+# lui-même l’objet prix qui devra être sérialisé à nouveau, à l'infini), Sf utilise la notion de GROUPE
+# (=> définir les attributs qui seront sérialisés selon la vue que nous voulons afficher).
+
 AppBundle\Entity\Place:
     attributes:
         id:
-            groups: ['place', 'price']
+            groups: ['place', 'price', 'theme']
         name:
-            groups: ['place', 'price']
+            groups: ['place', 'price', 'theme']
         address:
-            groups: ['place', 'price']
+            groups: ['place', 'price', 'theme']
         prices:
+            groups: ['place']
+        themes:
             groups: ['place']
 
 AppBundle\Entity\Price:
@@ -21,3 +28,21 @@ AppBundle\Entity\Price:
             groups: ['place', 'price']
         place:
             groups: ['price']
+
+AppBundle\Entity\Theme:
+    attributes:
+        id:
+            groups: ['place', 'theme']
+        name:
+            groups: ['place', 'theme']
+        value:
+            groups: ['place', 'theme']
+        place:
+            groups: ['theme']
+
+
+#    Si nous utilisons le groupe price avec le sérialiseur, seuls les attributs dans ce groupe seront affichés ;
+#    et de la même façon, seuls les attributs dans le groupe place seront affichés si celui-ci est utilisé avec notre sérialiseur.
+# => Dans le CONTROLLER avec FosRestBundle, utiliser l’attribut *** serializerGroups *** de l’annotation View.
+
+# ((=> On suppose que dans config.yml, on a enabled le Serializer de Sf dans "framework".))

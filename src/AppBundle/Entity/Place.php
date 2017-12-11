@@ -59,7 +59,7 @@ class Place
     public function __construct()
     {
         $this->prices = new ArrayCollection();
-        $this->prices = new ArrayCollection();
+        $this->themes = new ArrayCollection();
     }
 
 
@@ -144,19 +144,24 @@ class Place
     }
 
     /**
+     * Set themes
+     *
      * @param $themes
+     * @return $this
      */
     public function setThemes($themes)
     {
         $this->themes = $themes;
+        return $this;
     }
 
     /**
-     * @return mixed
+     * Get themes
+     *
+     * @return Theme[]|ArrayCollection
      */
     public function getThemes()
     {
         return $this->themes;
     }
 }
-

@@ -110,7 +110,7 @@ class Price
      *
      * @return Price
      */
-    public function setPlace($place)
+    public function setPlace(Place $place)
     {
         $this->place = $place;
 

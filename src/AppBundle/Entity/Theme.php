@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Theme
  *
  * @ORM\Table(name="theme",
- *     uniqueConstraints={@ORM\UniqueConstraint(name="theme_name_place_unique", columns={"name", "place_id"})})
+ *     uniqueConstraints={@ORM\UniqueConstraint(name="themes_name_place_unique", columns={"name", "place_id"})})
  * @ORM\Entity(repositoryClass="AppBundle\Repository\ThemeRepository")
  */
 class Theme
@@ -20,29 +20,28 @@ class Theme
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=255, unique=true)
+     * @ORM\Column(name="name", type="string", length=255)
      */
-    private $name;
+    protected $name;
 
     /**
      * @var string
      *
      * @ORM\Column(name="value", type="string", length=255)
      */
-    private $value;
+    protected $value;
 
     /**
      * @var string
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Place", inversedBy="themes")
      *
-     * @ORM\Column(name="place", type="string", length=255)
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Place", inversedBy="themes")
      */
-    private $place;
+    protected $place;
 
 
     /**
@@ -104,21 +103,19 @@ class Theme
     }
 
     /**
-     * Set place
+     * Set Place
      *
      * @param string $place
-     *
      * @return Theme
      */
     public function setPlace($place)
     {
         $this->place = $place;
-
         return $this;
     }
 
     /**
-     * Get place
+     * Get Place
      *
      * @return string
      */

@@ -23,7 +23,9 @@ class PriceController extends Controller
      * @Rest\View(serializerGroups={"price"})
      * @Rest\Get("/places/{id}/prices")
      * @param Request $request
+     * @return Price[]|\Doctrine\Common\Collections\ArrayCollection|static
      */
+
     public function getPricesAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
@@ -43,6 +45,7 @@ class PriceController extends Controller
      * @Rest\View(statusCode=Response::HTTP_CREATED, serializerGroups={"price"})
      * @Rest\Post("/places/{id}/prices")
      * @param Request $request
+     * @return Price|\Symfony\Component\Form\FormInterface|static
      */
     public function postPricesAction(Request $request)
     {
