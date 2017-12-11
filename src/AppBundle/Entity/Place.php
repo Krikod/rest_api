@@ -4,6 +4,8 @@ namespace AppBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use FOS\RestBundle\Controller\Annotations as Rest;
+
 # On ajoute une contrainte d'unicité sur le champ name
 /**
  * Place
@@ -43,8 +45,20 @@ class Place
      */
     protected $prices;
 
+    /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Theme", mappedBy="place")
+     * @var Theme []
+     */
+    protected $themes;
+
+
+
+    /**
+     * Place constructor.
+     */
     public function __construct()
     {
+        $this->prices = new ArrayCollection();
         $this->prices = new ArrayCollection();
     }
 
@@ -105,6 +119,44 @@ class Place
     public function getAddress()
     {
         return $this->address;
+    }
+
+    /**
+     * Set prices
+     *
+     * @param $prices
+     * @return $this
+     */
+    public function setPrices($prices)
+    {
+        $this->prices = $prices;
+        return $this;
+    }
+
+    /**
+     * Get prices
+     *
+     * @return Price[]|ArrayCollection
+     */
+    public function getPrices()
+    {
+        return $this->prices;
+    }
+
+    /**
+     * @param $themes
+     */
+    public function setThemes($themes)
+    {
+        $this->themes = $themes;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getThemes()
+    {
+        return $this->themes;
     }
 }
 

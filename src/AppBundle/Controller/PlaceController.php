@@ -141,14 +141,26 @@ class PlaceController extends Controller
         $place = $em->getRepository('AppBundle:Place')
             ->find($request->get('id'));
         /* @var $place Place */
+// Tenant compte des relations entre ressources, la suppression d'un lieu
+// doit conduire à supprimer les prix associés:
+        if (!$place) {
+            return;
+        }
+
+        foreach ($place->getPrices() as $price) {
+            $em->remove($price);
+        }
+        $em->remove($place);
+        $em->flush();
+
 
         # Delete doit être une action IDEMPOTENTE: produit le même résultat peu importe
         # le nombre de fois qu’elle est exécutée -> évite d'avoir une erreur serveur 500 si une donnée
         #  n'existe pas ou plus.
-        if ($place) {
-            $em->remove($place);
-            $em->flush();
-        }
+//        if ($place) {
+//            $em->remove($place);
+//            $em->flush();
+//        }
     }
 
     /**
