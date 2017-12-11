@@ -52,7 +52,6 @@ class Place
     protected $themes;
 
 
-
     /**
      * Place constructor.
      */

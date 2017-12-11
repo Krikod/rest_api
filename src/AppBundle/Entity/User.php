@@ -2,13 +2,14 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * User
  *
  * @ORM\Table(name="user",
- *     uniqueConstraints={@ORM\UniqueConstraint(name="email_name_unique",columns={"email"})})
+ *     uniqueConstraints={@ORM\UniqueConstraint(name="users_email_unique",columns={"email"})})
  * @ORM\Entity(repositoryClass="AppBundle\Repository\UserRepository")
  */
 class User
@@ -42,6 +43,17 @@ class User
      * @ORM\Column(name="email", type="string", length=255)
      */
     private $email;
+
+    /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Preference", mappedBy="user")
+     * @var Preference []
+     */
+    protected $preferences;
+
+    public function __construct()
+    {
+        $this->preferences = new ArrayCollection();
+    }
 
 
     /**
@@ -124,6 +136,22 @@ class User
     public function getEmail()
     {
         return $this->email;
+    }
+
+    /**
+     * @param $preferences
+     */
+    public function setPreferences($preferences)
+    {
+        $this->preferences = $preferences;
+    }
+
+    /**
+     * @return Preference[]|ArrayCollection
+     */
+    public function getPreferences()
+    {
+        return $this->preferences;
     }
 }
 
