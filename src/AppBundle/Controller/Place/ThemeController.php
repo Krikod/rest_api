@@ -10,13 +10,16 @@ use FOS\RestBundle\View\View;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use FOS\RestBundle\Controller\Annotations as Rest; // alias pour toutes les annotations
 
+/**
+ * Class ThemeController
+ * @package AppBundle\Controller\Place
+ */
 class ThemeController extends Controller
 {
     /**
-     * @Rest\View(SerializerGroups={"theme"})
+     * @Rest\View(serializerGroups={"theme"})
      * @Rest\Get("/places/{id}/themes")
      * @param Request $request
      * @return \AppBundle\Entity\Theme[]|\Doctrine\Common\Collections\ArrayCollection|static
@@ -67,6 +70,6 @@ class ThemeController extends Controller
 
     private function placeNotFound()
     {
-        return View::create(['message' => 'Place not found', Response::HTTP_NOT_FOUND]);
+        return View::create(['message' => 'Place not found'], Response::HTTP_NOT_FOUND);
     }
 }

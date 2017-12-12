@@ -4,6 +4,7 @@ namespace AppBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use FOS\RestBundle\Controller\Annotations as Rest;
 
 /**
  * User
@@ -50,11 +51,13 @@ class User
      */
     protected $preferences;
 
+    /**
+     * User constructor.
+     */
     public function __construct()
     {
         $this->preferences = new ArrayCollection();
     }
-
 
     /**
      * Get id
@@ -139,14 +142,20 @@ class User
     }
 
     /**
+     * Set preferences
+     *
      * @param $preferences
+     * @return $this
      */
     public function setPreferences($preferences)
     {
         $this->preferences = $preferences;
+        return $this;
     }
 
     /**
+     * Get preferences
+     *
      * @return Preference[]|ArrayCollection
      */
     public function getPreferences()

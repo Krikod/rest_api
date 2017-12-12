@@ -15,10 +15,14 @@ prices:
     type: rest
     resource: AppBundle\Controller\Place\PriceController
 
+themes:
+    type: rest
+    resource: AppBundle\Controller\Place\ThemeController
+
 users:
     type: rest
     resource: AppBundle\Controller\UserController
 
-themes:
+preferences:
     type: rest
-    resource: AppBundle\Controller\Place\ThemeController
+    resource: AppBundle\Controller\User\PreferenceController

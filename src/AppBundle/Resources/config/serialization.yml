@@ -40,6 +40,17 @@ AppBundle\Entity\Theme:
         place:
             groups: ['theme']
 
+AppBundle\Entity\User:
+    attributes:
+        id:
+            groups: ['user', 'preference']
+        name:
+            groups: ['user', 'preference']
+        value:
+            groups: ['user', 'preference']
+        preferences:
+            groups: ['user']
+
 
 #    Si nous utilisons le groupe price avec le sérialiseur, seuls les attributs dans ce groupe seront affichés ;
 #    et de la même façon, seuls les attributs dans le groupe place seront affichés si celui-ci est utilisé avec notre sérialiseur.

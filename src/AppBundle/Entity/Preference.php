@@ -39,7 +39,7 @@ class Preference
     /**
      * @var string User
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User, inversedBy="preferences")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="preferences")
      */
     protected $user;
 
