@@ -8,6 +8,7 @@ use AppBundle\Entity\Theme;
 use AppBundle\Form\ThemeType;
 use FOS\RestBundle\View\View;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use FOS\RestBundle\Controller\Annotations as Rest; // alias pour toutes les annotations
@@ -35,6 +36,25 @@ class ThemeController extends Controller
         }
 
         return $place->getThemes();
+    }
+
+//    /**
+//     * @Rest\View(serializerGroups={"theme"})
+//     * @Rest\Get("/places/{id}/themes/{id}")
+//     * @param $id
+//     * @param Request $request
+//     * @return Theme|null|object|JsonResponse
+//     */
+//    public function getThemeAction($id, Request $request)
+//    {
+//        $em = $this->getDoctrine()->getManager();
+//        $theme = $em->getRepository('AppBundle:Theme')->find($id);
+//
+//        if (empty($theme)) {
+//            return new JsonResponse(['message' => 'Theme not found'], Response::HTTP_NOT_FOUND);
+//        }
+
+        return $theme;
     }
 
     /**

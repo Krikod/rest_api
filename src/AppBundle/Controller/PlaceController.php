@@ -16,10 +16,11 @@ use AppBundle\Entity\Place;
 class PlaceController extends Controller
 {
     /**
+     *
      * @Rest\View(serializerGroups={"place"})
      * @Rest\Get("/places")
      * @param Request $request
-     * @return JsonResponse
+     * @return Place[]|array
      */
     public function getPlacesAction (Request $request)
     {
@@ -72,8 +73,8 @@ class PlaceController extends Controller
      */
     public function getPlaceAction($id, Request $request)
     {
-        $repository = $this->getDoctrine()->getManager()->getRepository('AppBundle:Place');
-        $place = $repository->find($id);
+        $em = $this->getDoctrine()->getManager()->getRepository('AppBundle:Place');
+        $place = $em->find($id);
         /* @var $place \AppBundle\Entity\Place */
 
         if (empty($place)) {

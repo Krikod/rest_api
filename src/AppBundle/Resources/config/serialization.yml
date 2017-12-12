@@ -44,12 +44,26 @@ AppBundle\Entity\User:
     attributes:
         id:
             groups: ['user', 'preference']
+        firstname:
+            groups: ['user', 'preference']
+        lastname:
+            groups: ['user', 'preference']
+        email:
+            groups: ['user', 'preference']
+        preferences:
+            groups: ['user']
+
+AppBundle\Entity\Preference:
+    attributes:
+        id:
+            groups: ['user', 'preference']
         name:
             groups: ['user', 'preference']
         value:
             groups: ['user', 'preference']
-        preferences:
-            groups: ['user']
+        user:
+            groups: ['preference']
+
 
 
 #    Si nous utilisons le groupe price avec le sérialiseur, seuls les attributs dans ce groupe seront affichés ;

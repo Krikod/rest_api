@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use AppBundle\Form\ThemeType;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use FOS\RestBundle\Controller\Annotations as Rest;
@@ -15,6 +16,8 @@ use FOS\RestBundle\Controller\Annotations as Rest;
  */
 class User
 {
+    const MATCH_VALUE_THRESHOLD = 25;
+
     /**
      * @var int
      *
@@ -161,6 +164,26 @@ class User
     public function getPreferences()
     {
         return $this->preferences;
+    }
+
+    // Calcul du niveau de correspondance entre les thèmes d'un lieu et les préférences de l'utilisateur
+
+    /**
+     * @param Theme $themes
+     * @return bool
+     */
+    public function preferencesMatch(Theme $themes)
+    {
+           $matchValue = 0;
+           foreach ($this->preferences as $preference) {
+               foreach ($themes as $theme) {
+                   if ($preference->match($theme)) {
+                       $matchValue += $preference->getValue() * $themes->getValue();
+                       // todo vérifier = Ne reconnaît pas getValue() avec $theme !!!!!
+                   }
+               }
+           }
+           return $matchValue >= self::MATCH_VALUE_THRESHOLD;
     }
 }
 

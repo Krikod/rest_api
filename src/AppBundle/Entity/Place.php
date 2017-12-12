@@ -155,7 +155,6 @@ class Place
 
     /**
      * Get themes
-     *
      * @return Theme[]|ArrayCollection
      */
     public function getThemes()

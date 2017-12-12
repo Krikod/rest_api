@@ -123,5 +123,16 @@ class Preference
     {
         return $this->user;
     }
+
+    // Méthode permettant de vérifier si le nom du thème est le même que celui de la préférence de l’utilisateur.
+
+    /**
+     * @param Theme $theme
+     * @return bool
+     */
+    public function match(Theme $theme)
+    {
+        return $this->name === $theme->getName();
+    }
 }
 

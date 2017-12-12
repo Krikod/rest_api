@@ -15,10 +15,10 @@ use FOS\RestBundle\View\View; // Utilisation de la vue de FOSRestBundle
 class UserController extends Controller
 {
     /**
-     * @Rest\View()
+     * @Rest\View(serializerGroups={"user"})
      * @Rest\Get("/users")
      * @param Request $request
-     * @return JsonResponse
+     * @return User[]|array
      */
     public function getUsersAction(Request $request)
     {
@@ -44,17 +44,17 @@ class UserController extends Controller
      * @Rest\Get("/users/{id}")
      * @param $id
      * @param Request $request
-     * @return JsonResponse
+     * @return User|null|object|JsonResponse
      */
     public function getUserAction($id, Request $request) {
         $user = $this->getDoctrine()->getRepository('AppBundle:User')
             ->find($id);
         /* @var $user User */
 
-
         // Gérer une erreur 404
         if (empty($user)) {
-            return new JsonResponse(['message' => 'User not found', Response::HTTP_NOT_FOUND]);
+            return $this->userNotFound();
+//            return new JsonResponse(['message' => 'User not found', Response::HTTP_NOT_FOUND]);
         }
 
         return $user;
@@ -67,6 +67,11 @@ class UserController extends Controller
 //        ];
 //
 //        return new JsonResponse($formatted);
+    }
+
+    private function userNotFound()
+    {
+        return View::create(['message' => 'User not found', Response::HTTP_NOT_FOUND]);
     }
 
     /**
@@ -163,6 +168,36 @@ class UserController extends Controller
             return $form;
         }
     }
+
+    /**
+     * @Rest\View(serializerGroups={"place"})
+     * @Rest\Get("/users/{id}/suggestions")
+     * @param Request $request
+     * @return array|static
+     */
+    public function getUserSuggestionsAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $user = $em->getRepository('AppBundle:User')->find($request->get('id'));
+        /* @var $user User */
+
+        if (empty($user)) {
+            return $this->userNotFound();
+        }
+
+        $suggestions = [];
+
+        $places = $this->getDoctrine()->getManager()->getRepository('AppBundle:Place')->findAll();
+
+        foreach ($places as $place) {
+            if ($user->preferencesMatch($place->getThemes())) {
+                $suggestions[] = $place;
+            }
+        }
+        return $suggestions;
+
+    }
+
 //    /**
 //     * @Rest\View(statusCode=Response::HTTP_ACCEPTED)
 //     * @Rest\Put("/users/{id}")
