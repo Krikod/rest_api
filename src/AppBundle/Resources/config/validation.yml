@@ -70,4 +70,15 @@ AppBundle\Entity\Preference:
             - LessThanOrEqual:
                 value: 10
 
-
+# Règles de validation pour la création d'un budget
+AppBundle\Entity\Budget:
+    properties:
+        scope:
+            - NotNull: ~
+            - Choice:
+                choices: [ less_than_10, 10_25, more_than_25 ]
+        value:
+            - NotNull: ~
+            - Type: numeric
+            - GreaterThan:
+                value: 0

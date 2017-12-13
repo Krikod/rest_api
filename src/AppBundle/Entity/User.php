@@ -55,6 +55,12 @@ class User
     protected $preferences;
 
     /**
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Budget", inversedBy="budget")
+     * @var Budget
+     */
+    protected $budget;
+
+    /**
      * User constructor.
      */
     public function __construct()
@@ -184,6 +190,28 @@ class User
                }
            }
            return $matchValue >= self::MATCH_VALUE_THRESHOLD;
+    }
+
+    /**
+     * Set budget
+     *
+     * @param $budget
+     * @return $this
+     */
+    public function setBudget($budget)
+    {
+        $this->budget = $budget;
+        return $this;
+    }
+
+    /**
+     * Get budget
+     *
+     * @return Budget
+     */
+    public function getBudget()
+    {
+        return $this->budget;
     }
 }
 

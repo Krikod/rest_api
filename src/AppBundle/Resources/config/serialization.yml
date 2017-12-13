@@ -63,7 +63,15 @@ AppBundle\Entity\Preference:
             groups: ['user', 'preference']
         user:
             groups: ['preference']
-
+#
+#AppBundle\Entity\Budget:
+#    attributes:
+#        id:
+#            groups:
+#        scope:
+#            groups:
+#        value:
+#            groups:
 
 
 #    Si nous utilisons le groupe price avec le sérialiseur, seuls les attributs dans ce groupe seront affichés ;

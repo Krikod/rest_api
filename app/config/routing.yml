@@ -30,3 +30,7 @@ preferences:
 suggestions:
     type: rest
     resource: AppBundle\Controller\UserController
+
+budget:
+    type: rest
+    resource: AppBundle\Controller\User\BudgetController
