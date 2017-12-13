@@ -26,3 +26,7 @@ users:
 preferences:
     type: rest
     resource: AppBundle\Controller\User\PreferenceController
+
+suggestions:
+    type: rest
+    resource: AppBundle\Controller\UserController

@@ -4,6 +4,7 @@ namespace AppBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use FOS\RestBundle\Controller\Annotations as Rest;
 
 # On ajoute une contrainte d'unicité sur le champ name
 /**
@@ -143,7 +144,6 @@ class Place
 
     /**
      * Set themes
-     *
      * @param $themes
      * @return $this
      */

@@ -169,16 +169,16 @@ class User
     // Calcul du niveau de correspondance entre les thèmes d'un lieu et les préférences de l'utilisateur
 
     /**
-     * @param Theme $themes
+     * @param ArrayCollection $themes
      * @return bool
      */
-    public function preferencesMatch(Theme $themes)
+    public function preferencesMatch($themes)
     {
            $matchValue = 0;
            foreach ($this->preferences as $preference) {
                foreach ($themes as $theme) {
                    if ($preference->match($theme)) {
-                       $matchValue += $preference->getValue() * $themes->getValue();
+                       $matchValue += $preference->getValue() * $theme->getValue();
                        // todo vérifier = Ne reconnaît pas getValue() avec $theme !!!!!
                    }
                }

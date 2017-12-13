@@ -53,9 +53,9 @@ class ThemeController extends Controller
 //        if (empty($theme)) {
 //            return new JsonResponse(['message' => 'Theme not found'], Response::HTTP_NOT_FOUND);
 //        }
-
-        return $theme;
-    }
+//
+//        return $theme;
+//    }
 
     /**
      * @Rest\View(statusCode=Response::HTTP_CREATED, serializerGroups={"theme"})
