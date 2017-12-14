@@ -46,7 +46,8 @@ class Place
     protected $prices;
 
     /**
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Theme", mappedBy="place")
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Theme",
+     *     mappedBy="place")
      * @var Theme []
      */
     protected $themes;

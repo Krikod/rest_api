@@ -36,7 +36,8 @@ class Budget
     protected $value;
 
     /**
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\User", mappedBy="user")
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\User",
+     *     inversedBy="budget")
      * @var
      */
     protected $user;

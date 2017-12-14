@@ -1,4 +1,5 @@
 <?php
+# src/AppBundle/Controller/User/BudgetController.php
 
 namespace AppBundle\Controller\User;
 

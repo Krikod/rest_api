@@ -39,7 +39,8 @@ class Theme
     /**
      * @var string
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Place", inversedBy="themes")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Place",
+     *     inversedBy="themes")
      */
     protected $place;
 

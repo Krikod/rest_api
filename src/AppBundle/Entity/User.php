@@ -49,14 +49,16 @@ class User
     private $email;
 
     /**
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Preference", mappedBy="user")
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Preference",
+     *     mappedBy="user")
      * @var Preference []
      */
     protected $preferences;
 
     /**
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Budget", inversedBy="budget")
-     * @var Budget
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Budget",
+     *     mappedBy="user")
+     * @var
      */
     protected $budget;
 
@@ -66,6 +68,7 @@ class User
     public function __construct()
     {
         $this->preferences = new ArrayCollection();
+        $this->budget = $budget;
     }
 
     /**

@@ -49,7 +49,7 @@ AppBundle\Entity\Theme:
                 choices: [ art, architecture, history, science-fiction, sport ]
         value:
             - NotNull: ~
-            - Type: numeric
+            - Type: float
             - GreaterThan:
                 value: 0
             - LessThanOrEqual:
@@ -76,7 +76,7 @@ AppBundle\Entity\Budget:
         scope:
             - NotNull: ~
             - Choice:
-                choices: [ less_than_10, 10_25, more_than_25 ]
+                choices: [ less_than_10, between_10_25, more_than_25 ]
         value:
             - NotNull: ~
             - Type: numeric
