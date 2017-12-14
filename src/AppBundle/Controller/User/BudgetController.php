@@ -26,8 +26,8 @@ class BudgetController extends Controller
      */
     public function getBudgetAction(Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
-        $user = $em->getRepository('AppBundle:User')
+        $user = $this->getDoctrine()
+            ->getRepository('AppBundle:User')
             ->find($request->get('id'));
         /* @var $user User */
 
@@ -47,8 +47,8 @@ class BudgetController extends Controller
      */
     public function postBudgetAction(Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
-        $user = $em->getRepository('AppBundle:User')
+        $user = $this->getDoctrine()
+            ->getRepository('AppBundle:User')
             ->find($request->get('id'));
         /* @var $user User */
 

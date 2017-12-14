@@ -27,8 +27,8 @@ class ThemeController extends Controller
      */
     public function getThemesAction(Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
-        $place = $em->getRepository('AppBundle:Place')->find($request->get('id'));
+        $place = $this->getDoctrine()
+            ->getRepository('AppBundle:Place')->find($request->get('id'));
         /* @var $place Place */
 
         if (empty($place)) {

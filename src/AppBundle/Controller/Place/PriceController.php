@@ -27,8 +27,7 @@ class PriceController extends Controller
      */
     public function getPricesAction(Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
-        $place = $em->getRepository('AppBundle:Place')
+        $place = $this->getDoctrine()->getRepository('AppBundle:Place')
             ->find($request->get('id'));
         // L'identifiant en tant que paramètre n'est plus nécessaire
         /* @var $place Place */
@@ -49,8 +48,7 @@ class PriceController extends Controller
      */
     public function postPricesAction(Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
-        $place = $em->getRepository('AppBundle:Place')
+        $place = $this->getDoctrine()->getRepository('AppBundle:Place')
             ->find($request->get('id'));
         /* @var $place Place */
 

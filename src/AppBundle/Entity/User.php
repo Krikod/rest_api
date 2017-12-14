@@ -17,6 +17,7 @@ use FOS\RestBundle\Controller\Annotations as Rest;
 class User
 {
     const MATCH_VALUE_THRESHOLD = 25;
+    const MATCH_VALUE_BUDGET_THRESHOLD = 20;
 
     /**
      * @var int
@@ -68,7 +69,7 @@ class User
     public function __construct()
     {
         $this->preferences = new ArrayCollection();
-        $this->budget = $budget;
+        $this->budget = new Budget();
     }
 
     /**
@@ -186,15 +187,29 @@ class User
            $matchValue = 0;
            foreach ($this->preferences as $preference) {
                foreach ($themes as $theme) {
-                   if ($preference->match($theme)) {
+                   if ($preference->matchT($theme)) {
                        $matchValue += $preference->getValue() * $theme->getValue();
-                       // todo vérifier = Ne reconnaît pas getValue() avec $theme !!!!!
                    }
                }
            }
+
            return $matchValue >= self::MATCH_VALUE_THRESHOLD;
     }
 
+    /**
+     * @param ArrayCollection $prices
+     * @return bool
+     */
+    public function budgetMatch($prices)
+    {
+        $matchValueB = 0;
+        foreach ($prices as $price) {
+            if ($budget->matchB($price)) {
+                $matchValueB += $budget->getValue() * $price->getValue();
+            }
+        }
+        return $matchValueB <= self::MATCH_VALUE_BUDGET_THRESHOLD;
+    }//todo $budget non défini !!!!!!!!!!
     /**
      * Set budget
      *

@@ -44,7 +44,6 @@ class Preference
     protected $user;
 
 
-
     /**
      * Get id
      *
@@ -130,7 +129,7 @@ class Preference
      * @param Theme $theme
      * @return bool
      */
-    public function match(Theme $theme)
+    public function matchT(Theme $theme)
     {
         return $this->name === $theme->getName();
     }

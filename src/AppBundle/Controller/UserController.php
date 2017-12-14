@@ -23,7 +23,9 @@ class UserController extends Controller
      */
     public function getUsersAction(Request $request)
     {
-        $users = $this->getDoctrine()->getRepository('AppBundle:User')->findAll();
+        $users = $this->getDoctrine()
+            ->getRepository('AppBundle:User')
+            ->findAll();
         /* @var $users User[] */
 
         return $users;
@@ -48,7 +50,8 @@ class UserController extends Controller
      * @return User|null|object|JsonResponse
      */
     public function getUserAction($id, Request $request) {
-        $user = $this->getDoctrine()->getRepository('AppBundle:User')
+        $user = $this->getDoctrine()
+            ->getRepository('AppBundle:User')
             ->find($id);
         /* @var $user User */
 
@@ -109,8 +112,8 @@ class UserController extends Controller
      */
     public function removeUserAction(Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
-        $user = $em->getRepository('AppBundle:User')
+        $user = $this->getDoctrine()
+            ->getRepository('AppBundle:User')
             ->find($request->get('id'));
         /* @var $user User */
 
@@ -149,8 +152,9 @@ class UserController extends Controller
      */
     private function updateUser(Request $request, $clearMissing)
     {
-        $em = $this->getDoctrine()->getManager();
-        $user = $em->getRepository('AppBundle:User')->find($request->get('id'));
+        $user = $this->getDoctrine()
+            ->getRepository('AppBundle:User')
+            ->find($request->get('id'));
 
         if (empty($user)) {
             return View::create(['message' => 'Place not found'], Response::HTTP_NOT_FOUND);
@@ -178,8 +182,9 @@ class UserController extends Controller
      */
     public function getUserSuggestionsAction(Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
-        $user = $em->getRepository('AppBundle:User')->find($request->get('id'));
+        $user = $this->getDoctrine()
+            ->getRepository('AppBundle:User')
+            ->find($request->get('id'));
         /* @var $user User */
 
         if (empty($user)) {
@@ -188,14 +193,17 @@ class UserController extends Controller
 
         $suggestions = [];
 
-        $em = $this->getDoctrine()->getManager();
-        $places = $em ->getRepository('AppBundle:Place')->findAll();
+        $places = $this->getDoctrine()
+            ->getRepository('AppBundle:Place')
+            ->findAll();
 
         foreach ($places as $place) {
-            if ($user->preferencesMatch($place->getThemes())) {
+            if ($user->preferencesMatch($place->getThemes())
+                AND $user->budgetMatch($place->getPrices())) {
                 $suggestions[] = $place;
             }
         }
+
         return $suggestions;
 
     }

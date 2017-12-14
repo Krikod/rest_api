@@ -120,5 +120,14 @@ class Budget
     {
         return $this->user;
     }
+
+    /**
+     * @param Price $price
+     * @return bool
+     */
+    public function matchB(Price $price)
+    {
+        return $this->value <= $price->getValue();
+    }
 }
 

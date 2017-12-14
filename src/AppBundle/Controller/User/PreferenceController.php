@@ -26,8 +26,9 @@ class PreferenceController extends Controller
      */
     public function getPreferencesAction(Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
-        $user = $em->getRepository('AppBundle:User')->find($request->get('id'));
+        $user = $this->getDoctrine()
+            ->getRepository('AppBundle:User')
+            ->find($request->get('id'));
         /* @var $user User */
 
         if (empty($user)) {

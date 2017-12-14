@@ -24,7 +24,9 @@ class PlaceController extends Controller
      */
     public function getPlacesAction (Request $request)
     {
-        $places = $this->getDoctrine()->getRepository('AppBundle:Place')->findAll();
+        $places = $this->getDoctrine()
+            ->getRepository('AppBundle:Place')
+            ->findAll();
         /* @var $places Place[] */
 // Vu que maintenant nous n’avons plus à définir le format dans les actions de nos contrôleurs, nous avons même la
 // possibilité de renvoyer directement nos objets sans utiliser l’objet View de FOSRestBundle.
@@ -73,8 +75,9 @@ class PlaceController extends Controller
      */
     public function getPlaceAction($id, Request $request)
     {
-        $em = $this->getDoctrine()->getManager()->getRepository('AppBundle:Place');
-        $place = $em->find($id);
+        $place = $this->getDoctrine()
+            ->getRepository('AppBundle:Place')
+            ->find($id);
         /* @var $place \AppBundle\Entity\Place */
 
         if (empty($place)) {
