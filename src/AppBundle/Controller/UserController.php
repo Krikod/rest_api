@@ -41,7 +41,7 @@ class UserController extends Controller
     }
 
     /**
-     * @Rest\View()
+     * @Rest\View(serializerGroups={"user"})
      * @Rest\Get("/users/{id}")
      * @param $id
      * @param Request $request

@@ -39,18 +39,20 @@ AppBundle\Entity\Theme:
             groups: ['place', 'theme']
         place:
             groups: ['theme']
-
+###################################################
 AppBundle\Entity\User:
     attributes:
         id:
-            groups: ['user', 'preference']
+            groups: ['user', 'preference', 'budget']
         firstname:
-            groups: ['user', 'preference']
+            groups: ['user', 'preference', 'budget']
         lastname:
-            groups: ['user', 'preference']
+            groups: ['user', 'preference', 'budget']
         email:
-            groups: ['user', 'preference']
+            groups: ['user', 'preference', 'budget']
         preferences:
+            groups: ['user']
+        budget:
             groups: ['user']
 
 AppBundle\Entity\Preference:
@@ -63,15 +65,17 @@ AppBundle\Entity\Preference:
             groups: ['user', 'preference']
         user:
             groups: ['preference']
-#
-#AppBundle\Entity\Budget:
-#    attributes:
-#        id:
-#            groups:
-#        scope:
-#            groups:
-#        value:
-#            groups:
+
+AppBundle\Entity\Budget:
+    attributes:
+        id:
+            groups: ['user', 'budget']
+        scope:
+            groups: ['user', 'budget']
+        value:
+            groups: ['user', 'budget']
+        user:
+            groups: ['budget']
 
 
 #    Si nous utilisons le groupe price avec le sérialiseur, seuls les attributs dans ce groupe seront affichés ;

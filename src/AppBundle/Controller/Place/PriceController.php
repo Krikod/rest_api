@@ -25,11 +25,11 @@ class PriceController extends Controller
      * @param Request $request
      * @return Price[]|\Doctrine\Common\Collections\ArrayCollection|static
      */
-
     public function getPricesAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-        $place = $em->getRepository('AppBundle:Place')->find($request->get('id'));
+        $place = $em->getRepository('AppBundle:Place')
+            ->find($request->get('id'));
         // L'identifiant en tant que paramètre n'est plus nécessaire
         /* @var $place Place */
 
@@ -40,9 +40,9 @@ class PriceController extends Controller
         return $place->getPrices();
     }
 
-
     /**
-     * @Rest\View(statusCode=Response::HTTP_CREATED, serializerGroups={"price"})
+     * @Rest\View(statusCode=Response::HTTP_CREATED,
+     *     serializerGroups={"price"})
      * @Rest\Post("/places/{id}/prices")
      * @param Request $request
      * @return Price|\Symfony\Component\Form\FormInterface|static
@@ -50,7 +50,8 @@ class PriceController extends Controller
     public function postPricesAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-        $place = $em->getRepository('AppBundle:Place')->find($request->get('id'));
+        $place = $em->getRepository('AppBundle:Place')
+            ->find($request->get('id'));
         /* @var $place Place */
 
         if(empty($place)) {
@@ -60,7 +61,7 @@ class PriceController extends Controller
         $price = new Price();
         $price->setPlace($place); // Ici, le lieu est associé au prix
         $form = $this->createForm(PriceType::class, $price);
-        // Le paramétre false dit à Symfony de garder les valeurs dans notre
+        // Le paramètre false dit à Symfony de garder les valeurs dans notre
         // entité si l'utilisateur n'en fournit pas une dans sa requête
         $form->submit($request->request->all());
 
@@ -72,13 +73,10 @@ class PriceController extends Controller
         } else {
             return $form;
         }
-
     }
 
     private function placeNotFound()
     {
         return View::create(['message' => 'Place not found', Response::HTTP_NOT_FOUND]);
     }
-
-
 }
