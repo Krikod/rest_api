@@ -73,25 +73,27 @@ class UserController extends Controller
 //        return new JsonResponse($formatted);
     }
 
-    private function userNotFound()
-    {
-        return View::create(['message' => 'User not found', Response::HTTP_NOT_FOUND]);
-    }
-
     /**
-     * @Rest\View(statusCode=Response::HTTP_CREATED)
+     * @Rest\View(statusCode=Response::HTTP_CREATED, serializerGroups={"user"})
      * @Rest\Post("/users")
      * @param Request $request
      */
     public function postUsersAction(Request $request)
     {
         $user = new User();
-        $form = $this->createForm(UserType::class, $user);
+//        Suite à validation plainPassword, on ajoute 'validation_groups'
+        $form = $this->createForm(UserType::class, $user, ['validation_groups' =>['Default', 'New']]);
         $form->submit($request->request->all());
         // Methode Submit au lieu de HandleRequest (->contraintes REST)
 
         // Validation des données
         if ($form->isValid()) {
+            // Hashage du mot de passe en clair -> grâce aux config mises en place
+            $encoder = $this->get('security.password_encoder');
+            // le mot de passe en claire est encodé avant la sauvegarde
+            $encoded = $encoder->encodePassword($user, $user->getPlainPassword());
+            $user->setPassword($encoded);
+
             $em = $this->getDoctrine()->getManager();
             $em->persist($user);
             $em->flush();
@@ -124,7 +126,7 @@ class UserController extends Controller
     }
 
     /**
-     * @Rest\View()
+     * @Rest\View(serializerGroups={"user"})
      * @Rest\Put("/users/{id}")
      * @param Request $request
      * @return mixed
@@ -135,7 +137,7 @@ class UserController extends Controller
     }
 
     /**
-     * @Rest\View()
+     * @Rest\View(serializerGroups={"user"})
      * @Rest\Patch("/users/{id}")
      * @param Request $request
      * @return mixed
@@ -157,16 +159,33 @@ class UserController extends Controller
             ->find($request->get('id'));
 
         if (empty($user)) {
-            return View::create(['message' => 'Place not found'], Response::HTTP_NOT_FOUND);
+            return $this->userNotFound();
+//            return View::create(['message' => 'Place not found'], Response::HTTP_NOT_FOUND);
 //            return new JsonResponse(['message' => 'User not found'], Response::HTTP_NOT_FOUND);
         }
 
-        $form = $this->createForm(UserType::class, $user);
+        if ($clearMissing) { // Si une mise à jour complète, le mot de passe doit être validé
+            $options = ['validation_groups'=>['Default', 'FullUpdate']];
+        } else {
+            $options = []; // Le groupe de validation par défaut de Symfony est Default
+            // (regroupe toutes les contraintes de validation qui ne sont dans aucun groupe.)
+            // VOIR -> http://symfony.com/doc/3.3/validation.html
+        }
+// On ajoute les options
+        $form = $this->createForm(UserType::class, $user, $options);
         $form->submit($request->request->all(), $clearMissing);
 
         if ($form->isValid()) {
+            // Si l'utilisateur veut changer son mot de passe
+            if (!empty($user->getPlainPassword())) {
+                $encoder = $this->get('security.password_encoder');
+                $encoded = $encoder->encodePassword($user, $user->getPlainPassword());
+                $user->setPassword($encoded);
+            }
+
             $em = $this->getDoctrine()->getManager();
-            $em->persist($user);
+            $em->merge($user); // todo voir diff merge() et persist(), suite à l'encoding
+//            $em->persist($user);
             $em->flush();
             return $user;
         } else {
@@ -235,4 +254,9 @@ class UserController extends Controller
 //            return $form;
 //        }
 //    }
+    private function userNotFound()
+    {
+        return View::create(['message' => 'User not found', Response::HTTP_NOT_FOUND]);
+    }
+
 }

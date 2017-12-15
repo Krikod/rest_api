@@ -24,8 +24,17 @@ AppBundle\Entity\User:
             - Type: string
         email:
             - NotBlank: ~
-            - Email: ~
-# => On ajoute la contrainte UniqueEntity "email" en annotation dans l'Entity User
+            - Email: ~ # => On ajoute la contrainte UniqueEntity "email" en annotation dans l'Entity User
+        plainPassword: # validation de base pour le mot de passe
+            - NotBlank: { groups: [New, Fullupdate] }
+            - Type: string
+            - Length:
+                min: 4
+                max: 50
+        # champ plainPassword => Les groupes nous permettrons d’activer sa contrainte
+#        NotBlank lorsque le client voudra créer ou mettre à jour tous les champs de l’utilisateur.
+#        Mais lors d’une mise à jour partielle (PATCH), si le champ est nul, il sera tout simplement ignoré.
+# !!!!! le mdp ne doit pas être SERIALISE (-> pas associé à un groupe de sérialisation)!!!!!
 
 # Règles de validation pour la création d'un prix
 AppBundle\Entity\Price:

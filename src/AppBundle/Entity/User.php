@@ -6,7 +6,8 @@ use AppBundle\Form\ThemeType;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use FOS\RestBundle\Controller\Annotations as Rest;
-
+use Symfony\Component\Security\Core\User\UserInterface;
+// Ajouter ***implements UserInterface*** à la classe User (après l'ajout de l'encoder dans security.yml)
 /**
  * User
  *
@@ -14,7 +15,7 @@ use FOS\RestBundle\Controller\Annotations as Rest;
  *     uniqueConstraints={@ORM\UniqueConstraint(name="users_email_unique",columns={"email"})})
  * @ORM\Entity(repositoryClass="AppBundle\Repository\UserRepository")
  */
-class User
+class User implements UserInterface
 {
     const MATCH_VALUE_THRESHOLD = 25;
     const MATCH_VALUE_BUDGET_THRESHOLD = 20;
@@ -62,6 +63,13 @@ class User
      * @var Budget
      */
     protected $budget;
+
+    /**
+     * @ORM\Column(type="string")
+     */
+    protected $password;
+
+    protected $plainPassword;
 
     /**
      * User constructor.
@@ -231,6 +239,76 @@ class User
     public function getBudget()
     {
         return $this->budget;
+    }
+
+    /**
+     * @param mixed $password
+     */
+    public function setPassword($password)
+    {
+        $this->password = $password;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPassword()
+    {
+        return $this->password;
+    }
+
+    /**
+     * @param mixed $plainPassword
+     */
+    public function setPlainPassword($plainPassword)
+    {
+        $this->plainPassword = $plainPassword;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPlainPassword()
+    {
+        return $this->plainPassword;
+    }
+
+    // Ajout en raison de UserInterface
+
+    /**
+     * @return array
+     */
+    public function getRoles()
+    {
+        return [];
+    }
+
+// http://symfony.com/doc/3.3/security/entity_provider.html
+// Do you need to use a Salt property?
+// If you use bcrypt, no. Otherwise, yes. All passwords must be hashed with a salt, but bcrypt does this internally.
+// Since this tutorial does use bcrypt, the getSalt() method in User can just return null (it's not used).
+// If you use a different algorithm, you'll need to uncomment the salt lines in the User entity and add a persisted
+// salt property.
+    /**
+     * @return null
+     */
+    public function getSalt()
+    {
+        return null;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUsername()
+    {
+        return $this->email;
+    }
+
+    public function eraseCredentials()
+    {
+        // Suppression des données sensibles
+        $this->plainPassword = null;
     }
 }
 

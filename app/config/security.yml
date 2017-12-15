@@ -1,3 +1,5 @@
+# app/config/security.yml
+
 # To get started with security, check out the documentation:
 # https://symfony.com/doc/current/security.html
 security:
@@ -22,3 +24,9 @@ security:
 
             # https://symfony.com/doc/current/security/form_login_setup.html
             #form_login: ~
+
+    encoders:
+        # Ajout d'un encoder pour notre entité USer
+        AppBundle\Entity\User:
+            algorithm: bcrypt
+            cost: 12

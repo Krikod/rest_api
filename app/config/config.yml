@@ -83,11 +83,21 @@ fos_rest:
         include_format: false
     view:
         view_response_listener: true
+# on déclare le format des réponses supportées, sans view (mais ces 2 formats osnt déjà
+# activés par défaut (inscrits pour clarté)
+        formats:
+            json: true
+            xml: true
     format_listener:
         rules:
-            - { path: '^/', priorities: ['json'], fallback_format: 'json' }
+# priorité entre ces formats, le comportement du serveur si aucun format n’est choisi par le client (prefer_extension: false)
+# formats supportés définis dans "priorities": on peut rajouter 'xml'
+            - { path: '^/', priorities: ['json', 'xml'], fallback_format: 'json', prefer_extension: false }
 # ==> pour toutes les URL (path: ^/), le format prioritaire est le JSON (priorities: ['json']) et si aucun format n’est
 # demandé par le client, il faudra utiliser le JSON quand même (fallback_format: 'json').
+# => C’est maintenant au client d’informer le serveur sur le ou les formats qu’il préfère.
+# ORDRE important! -> ici JSON choisi par le serveur si requête ne spécifie aucun format..
+
 # Configuration à ajouter pour désactiver le body listener (=false):
     body_listener:
         enabled: true

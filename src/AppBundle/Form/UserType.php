@@ -16,7 +16,11 @@ class UserType extends AbstractType
     {
         $builder->add('firstname')
             ->add('lastname')
-            ->add('email', EmailType::class);
+            ->add('email', EmailType::class)
+//        Le formulaire de création d’utilisateur et l’action associée
+//        dans notre contrôleur vont être adaptés en conséquence :
+//        (puis faire validation pour le password)
+            ->add('plainPassword');
     }
     
     /**
