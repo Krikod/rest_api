@@ -59,7 +59,7 @@ class User
     /**
      * @ORM\OneToOne(targetEntity="AppBundle\Entity\Budget",
      *     mappedBy="user")
-     * @var
+     * @var Budget
      */
     protected $budget;
 
@@ -69,7 +69,6 @@ class User
     public function __construct()
     {
         $this->preferences = new ArrayCollection();
-        $this->budget = new Budget();
     }
 
     /**
@@ -204,12 +203,14 @@ class User
     {
         $matchValueB = 0;
         foreach ($prices as $price) {
-            if ($budget->matchB($price)) {
-                $matchValueB += $budget->getValue() * $price->getValue();
+
+            if ($this->budget->matchB($price)) {
+                $matchValueB += $this->budget->getValue() * $price->getValue();
             }
         }
         return $matchValueB <= self::MATCH_VALUE_BUDGET_THRESHOLD;
-    }//todo $budget non défini !!!!!!!!!!
+    }
+
     /**
      * Set budget
      *
