@@ -31,9 +31,9 @@ AppBundle\Entity\User:
             - Length:
                 min: 4
                 max: 50
-        # champ plainPassword => Les groupes nous permettrons d’activer sa contrainte
+#        !!! Champ plainPassword => Les groupes permettrons d’activer sa contrainte
 #        NotBlank lorsque le client voudra créer ou mettre à jour tous les champs de l’utilisateur.
-#        Mais lors d’une mise à jour partielle (PATCH), si le champ est nul, il sera tout simplement ignoré.
+#        Mais lors d’une mise à jour partielle (PATCH), si le champ est nul, il sera ignoré.
 # !!!!! le mdp ne doit pas être SERIALISE (-> pas associé à un groupe de sérialisation)!!!!!
 
 # Règles de validation pour la création d'un prix
@@ -91,3 +91,14 @@ AppBundle\Entity\Budget:
             - Type: numeric
             - GreaterThan:
                 value: 0
+
+# Règles de validation pour la création de Credentials
+AppBundle\Entity\Credentials:
+    properties:
+        login:
+            NotBlank: ~
+            Type: string
+        password:
+            NotBlank: ~
+            Type: string
+

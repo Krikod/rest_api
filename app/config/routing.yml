@@ -34,3 +34,7 @@ suggestions:
 budget:
     type: rest
     resource: AppBundle\Controller\User\BudgetController
+
+auth-tokens:
+    type: rest
+    resource: AppBundle\Controller\AuthTokenController

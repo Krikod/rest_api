@@ -39,7 +39,7 @@ class AuthToken
 
     // on ajoute $user mappé MtO unidir.
     /**
-     * @ORM\ManyToOne(targetEntity="user")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User")
      * @var User
      */
     protected $user;

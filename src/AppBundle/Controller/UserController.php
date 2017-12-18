@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
 use FOS\RestBundle\View\ViewHandler; // Service "fos_rest.view_handler" qui permet de gérer les réponses.
 use FOS\RestBundle\View\View; // Utilisation de la vue de FOSRestBundle
 
+
 class UserController extends Controller
 {
     /**
@@ -90,7 +91,8 @@ class UserController extends Controller
         if ($form->isValid()) {
             // Hashage du mot de passe en clair -> grâce aux config mises en place
             $encoder = $this->get('security.password_encoder');
-            // le mot de passe en claire est encodé avant la sauvegarde
+
+            // le mot de passe en clair est encodé avant la sauvegarde
             $encoded = $encoder->encodePassword($user, $user->getPlainPassword());
             $user->setPassword($encoded);
 
@@ -150,7 +152,7 @@ class UserController extends Controller
     /**
      * @param Request $request
      * @param $clearMissing
-     * @return mixed
+     * @return User|null|object|\Symfony\Component\Form\FormInterface|static
      */
     private function updateUser(Request $request, $clearMissing)
     {
@@ -224,7 +226,6 @@ class UserController extends Controller
         }
 
         return $suggestions;
-
     }
 
 //    /**

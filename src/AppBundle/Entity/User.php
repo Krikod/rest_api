@@ -2,18 +2,18 @@
 
 namespace AppBundle\Entity;
 
-use AppBundle\Form\ThemeType;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use FOS\RestBundle\Controller\Annotations as Rest;
 use Symfony\Component\Security\Core\User\UserInterface;
 // Ajouter ***implements UserInterface*** à la classe User (après l'ajout de l'encoder dans security.yml)
+
 /**
- * User
+ * Class User
  *
  * @ORM\Table(name="user",
  *     uniqueConstraints={@ORM\UniqueConstraint(name="users_email_unique",columns={"email"})})
  * @ORM\Entity(repositoryClass="AppBundle\Repository\UserRepository")
+ * @package AppBundle\Entity
  */
 class User implements UserInterface
 {
@@ -27,28 +27,28 @@ class User implements UserInterface
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      *
      * @ORM\Column(name="firstname", type="string", length=255)
      */
-    private $firstname;
+    protected $firstname;
 
     /**
      * @var string
      *
      * @ORM\Column(name="lastname", type="string", length=255)
      */
-    private $lastname;
+    protected $lastname;
 
     /**
      * @var string
      *
      * @ORM\Column(name="email", type="string", length=255)
      */
-    private $email;
+    protected $email;
 
     /**
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\Preference",
@@ -258,7 +258,7 @@ class User implements UserInterface
     }
 
     /**
-     * @param mixed $plainPassword
+     * @param $plainPassword
      */
     public function setPlainPassword($plainPassword)
     {
@@ -284,9 +284,9 @@ class User implements UserInterface
     }
 
 // http://symfony.com/doc/3.3/security/entity_provider.html
-// Do you need to use a Salt property?
-// If you use bcrypt, no. Otherwise, yes. All passwords must be hashed with a salt, but bcrypt does this internally.
-// Since this tutorial does use bcrypt, the getSalt() method in User can just return null (it's not used).
+// http://symfony.com/doc/3.3/doctrine/registration_form.html
+// The bcrypt algorithm doesn't require a separate salt. You *may* need a real salt if you choose a different encoder.
+// The getSalt() method in User can just return null (it's not used).
 // If you use a different algorithm, you'll need to uncomment the salt lines in the User entity and add a persisted
 // salt property.
     /**
