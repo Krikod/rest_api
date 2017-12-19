@@ -8,12 +8,9 @@ use Symfony\Component\Security\Core\User\UserInterface;
 // Ajouter ***implements UserInterface*** à la classe User (après l'ajout de l'encoder dans security.yml)
 
 /**
- * Class User
- *
+ * @ORM\Entity()
  * @ORM\Table(name="user",
- *     uniqueConstraints={@ORM\UniqueConstraint(name="users_email_unique",columns={"email"})})
- * @ORM\Entity(repositoryClass="AppBundle\Repository\UserRepository")
- * @package AppBundle\Entity
+ *     uniqueConstraints={@ORM\UniqueConstraint(name="user_email_unique", columns={"email"})})
  */
 class User implements UserInterface
 {
@@ -68,8 +65,8 @@ class User implements UserInterface
      * @ORM\Column(type="string")
      */
     protected $password;
-
     protected $plainPassword;
+
 
     /**
      * User constructor.
@@ -258,7 +255,7 @@ class User implements UserInterface
     }
 
     /**
-     * @param $plainPassword
+     * @param mixed $plainPassword
      */
     public function setPlainPassword($plainPassword)
     {
@@ -272,15 +269,27 @@ class User implements UserInterface
     {
         return $this->plainPassword;
     }
-
     // Ajout en raison de UserInterface
 
-    /**
-     * @return array
-     */
     public function getRoles()
     {
         return [];
+    }
+
+    public function getSalt()
+    {
+        return null;
+    }
+
+    public function getUsername()
+    {
+        return $this->email;
+    }
+
+    // Suppression des données sensibles
+    public function eraseCredentials()
+    {
+        $this->plainPassword = null;
     }
 
 // http://symfony.com/doc/3.3/security/entity_provider.html
@@ -289,26 +298,6 @@ class User implements UserInterface
 // The getSalt() method in User can just return null (it's not used).
 // If you use a different algorithm, you'll need to uncomment the salt lines in the User entity and add a persisted
 // salt property.
-    /**
-     * @return null
-     */
-    public function getSalt()
-    {
-        return null;
-    }
 
-    /**
-     * @return string
-     */
-    public function getUsername()
-    {
-        return $this->email;
-    }
-
-    public function eraseCredentials()
-    {
-        // Suppression des données sensibles
-        $this->plainPassword = null;
-    }
 }
 

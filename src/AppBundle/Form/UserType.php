@@ -4,8 +4,6 @@ namespace AppBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
-use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -18,8 +16,8 @@ class UserType extends AbstractType
     {
         $builder->add('firstname')
             ->add('lastname')
-            ->add('email')
-            ->add('plainPassword');
+            ->add('plainPassword') // Ajout du mot de passe
+            ->add('email', EmailType::class);
 //        Le formulaire de création d’utilisateur et l’action associée
 //        dans le contrôleur sont adaptés - puis faire validation pour le password
     }

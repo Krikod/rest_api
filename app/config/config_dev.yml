@@ -13,6 +13,18 @@ web_profiler:
 
 monolog:
     handlers:
+################################################################
+#    ajout debugger Log console
+#        stdout:
+#            type: stream
+#            path: "php://stdout"
+#            level: debug
+#            channels: ['!event']
+#        stderr:
+#            type: stream
+#            path: "php://stderr"
+#            level: warning
+###############################################################
         main:
             type: stream
             path: '%kernel.logs_dir%/%kernel.environment%.log'

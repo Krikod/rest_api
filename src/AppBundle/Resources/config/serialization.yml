@@ -43,13 +43,13 @@ AppBundle\Entity\Theme:
 AppBundle\Entity\User:
     attributes:
         id:
-            groups: ['user', 'preference', 'budget', 'auth-token']
+            groups: ['user', 'preference', 'budget']
         firstname:
-            groups: ['user', 'preference', 'budget', 'auth-token']
+            groups: ['user', 'preference', 'budget']
         lastname:
-            groups: ['user', 'preference', 'budget', 'auth-token']
+            groups: ['user', 'preference', 'budget']
         email:
-            groups: ['user', 'preference', 'budget', 'auth-token']
+            groups: ['user', 'preference', 'budget']
         preferences:
             groups: ['user']
         budget:
@@ -77,16 +77,6 @@ AppBundle\Entity\Budget:
         user:
             groups: ['budget']
 
-AppBundle\Entity\AuthToken:
-    attributes:
-        id:
-            groups: ['auth-token']
-        value:
-            groups: ['auth-token']
-        createDate:
-            groups: ['auth-token']
-        user:
-            groups: ['auth-token']
 
 
 #    Si nous utilisons le groupe price avec le sérialiseur, seuls les attributs dans ce groupe seront affichés ;

@@ -1,7 +1,7 @@
 # app/config/routing.yml
 
-#Dans la clé app, la déclaration a été changée pour dire à Symfony de ne plus charger nos contrôleurs REST, la clé
-#app.resource passe ainsi de @AppBundle/Controller à @AppBundle/Controller/DefaultController.php
+# Dans la clé app, la déclaration a été changée pour dire à Symfony de ne plus charger nos contrôleurs REST, la clé
+# app.resource passe ainsi de @AppBundle/Controller à @AppBundle/Controller/DefaultController.php
 
 app:
     resource: '@AppBundle/Controller/DefaultController.php'
@@ -34,7 +34,7 @@ suggestions:
 budget:
     type: rest
     resource: AppBundle\Controller\User\BudgetController
-
-auth-tokens:
-    type: rest
-    resource: AppBundle\Controller\AuthTokenController
+#
+#auth-tokens:
+#    type: rest
+#    resource: AppBundle\Controller\AuthTokenController
