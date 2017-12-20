@@ -22,14 +22,16 @@ AppBundle\Entity\User:
         lastname:
             - NotBlank: ~
             - Type: string
-        email:   # => On ajoute la contrainte UniqueEntity "email" en annotation dans l'Entity User
+# => On ajoute la contrainte UniqueEntity "email" en annotation dans l'Entity User
+        email:
             - NotBlank: ~
             - Email: ~
-        plainPassword: #validation de base pour le mot de passe
+# validation de base pour le mot de passe
+        plainPassword:
             - NotBlank: { groups: [New, FullUpdate] }
             - Type: string
-            - Lenght:
-                min: 3
+            - Length:
+                min: 4
                 max: 50
 #        !!! Champ plainPassword => Les groupes permettrons d’activer sa contrainte
 #        NotBlank lorsque le client voudra créer ou mettre à jour tous les champs de l’utilisateur.
@@ -93,5 +95,12 @@ AppBundle\Entity\Budget:
                 value: 0
 
 # Règles de validation pour la création de Credentials
-
+AppBundle\Entity\Credentials:
+    properties:
+        login:
+            - NotBlank: ~
+            - Type: string
+        password:
+            - NotBlank: ~
+            - Type: string
 

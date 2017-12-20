@@ -9,8 +9,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-//use FOS\RestBundle\View\ViewHandler; // Service "fos_rest.view_handler" qui permet de gérer les réponses.
+//use FOS\RestBundle\View\ViewHandler; // Service "fos_rest.view_handler" -> permet de gérer les réponses.
 use FOS\RestBundle\View\View; // Utilisation de la vue de FOSRestBundle
+use Symfony\Component\Validator\Constraints\LengthValidator;
 
 
 class UserController extends Controller
@@ -77,6 +78,7 @@ class UserController extends Controller
      * @Rest\View(statusCode=Response::HTTP_CREATED, serializerGroups={"user"})
      * @Rest\Post("/users")
      * @param Request $request
+     * @return User|\Symfony\Component\Form\FormInterface
      */
     public function postUsersAction(Request $request)
     {
@@ -158,6 +160,7 @@ class UserController extends Controller
         $user = $this->getDoctrine()
             ->getRepository('AppBundle:User')
             ->find($request->get('id'));
+            /* @var $user User */
 
         if (empty($user)) {
             return $this->userNotFound();
@@ -256,7 +259,7 @@ class UserController extends Controller
 //    }
     private function userNotFound()
     {
-        return View::create(['message' => 'User not found', Response::HTTP_NOT_FOUND]);
+        return View::create(['message' => 'User not found'], Response::HTTP_NOT_FOUND);
     }
 
 }

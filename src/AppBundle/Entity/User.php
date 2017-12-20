@@ -5,13 +5,13 @@ namespace AppBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
-// Ajouter ***implements UserInterface*** à la classe User (après l'ajout de l'encoder dans security.yml)
 
 /**
  * @ORM\Entity()
  * @ORM\Table(name="user",
  *     uniqueConstraints={@ORM\UniqueConstraint(name="user_email_unique", columns={"email"})})
  */
+// Ajouter ***implements UserInterface*** à la classe User pour le process d'authentification
 class User implements UserInterface
 {
     const MATCH_VALUE_THRESHOLD = 25;
@@ -64,9 +64,8 @@ class User implements UserInterface
     /**
      * @ORM\Column(type="string")
      */
-    protected $password;
-    protected $plainPassword;
-
+    private $password;
+    private $plainPassword;
 
     /**
      * User constructor.
@@ -249,6 +248,7 @@ class User implements UserInterface
     /**
      * @return mixed
      */
+//  On récupère le password encodé
     public function getPassword()
     {
         return $this->password;
@@ -269,7 +269,7 @@ class User implements UserInterface
     {
         return $this->plainPassword;
     }
-    // Ajout en raison de UserInterface
+    // Vient avec le UserInterface
 
     public function getRoles()
     {
