@@ -10,6 +10,11 @@ AppBundle\Entity\Place:
         address:
             - NotBlank: ~
             - Type: string
+        # Ajouter règle ***valid*** pour dire à Symfony de valider l’attribut
+        # prices en utilisant les contraintes de validation de l’entité Price.
+        # => Pas de NotBlank car l'attribut ***prices*** est optionnel
+        prices:
+            - Valid: ~
 # => Ajouter la contrainte UniqueEntity "name" en annotation dans l'Entity Place
 
 AppBundle\Entity\User:

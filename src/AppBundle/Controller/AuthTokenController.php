@@ -78,7 +78,7 @@ class AuthTokenController extends Controller
             $em->remove($authToken);
             $em->flush();
         } else {
-            throw new BadRequestHttpException('Bad Request');
+            throw new BadRequestHttpException();
             // todo : Pourquoi message pas compris dans BadRequestHttpException ?
             //On ne le config pas dans config.yml ??
         }

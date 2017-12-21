@@ -109,6 +109,12 @@ class PlaceController extends Controller
         // Validation des données
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
+            // On ajoute les prix d'un lieu suite à l'ajout des prix du lieu dans le formType
+            foreach ($place->getPrices() as $price) {
+                $price->setPlace($place);
+                $em->persist($price);
+                // Puis on modifiera l'Entité Place (ajouter attribut prices = collection vide)
+            }
             $em->persist($place);
             $em->flush();
             return $place;

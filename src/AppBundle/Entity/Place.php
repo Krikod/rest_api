@@ -40,7 +40,7 @@ class Place
     protected $address;
 
     /**
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Price", mappedBy="place")
+     * @ORM\OneToMany(targetEntity="Price", mappedBy="place")
      * @var Price[]
      */
     protected $prices;
@@ -48,14 +48,12 @@ class Place
     /**
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\Theme",
      *     mappedBy="place")
-     * @var Theme []
+     * @var Theme[]
      */
     protected $themes;
 
-
-    /**
-     * Place constructor.
-     */
+// todo !!! Nous pouvons maintenant créer un lieu tout en rajoutant des prix et le principe peut même être élargi
+// pour les THEMES des lieux et les PREFERENCES des utilisateurs.
     public function __construct()
     {
         $this->prices = new ArrayCollection();
