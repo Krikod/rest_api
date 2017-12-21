@@ -97,6 +97,8 @@ fos_rest:
         # => ne marche qu'avec app_dev.php, pas app.php !!!!!
         codes:
             'Symfony\Component\Security\Core\Exception\BadCredentialsException': 401
+#            'Symfony\Component\HttpKernel\Exception\BadRequestHttpException': 400
+
     view:
         view_response_listener: true
 # on déclare le format des réponses supportées, sans view (mais ces 2 formats ont déjà

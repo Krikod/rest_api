@@ -1,4 +1,5 @@
 <?php
+# src/AppBunle/Controller/AuthTokenController.php
 
 namespace AppBundle\Controller;
 
@@ -10,6 +11,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use FOS\RestBundle\Controller\Annotations as Rest;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 
 class AuthTokenController extends Controller
@@ -56,5 +58,29 @@ class AuthTokenController extends Controller
     private function invalidCredentials()
     {
         return View::create(['message' => 'Invalid credentials'], Response::HTTP_BAD_REQUEST);
+    }
+
+    /**
+     * @Rest\View(statusCode=Response::HTTP_NO_CONTENT)
+     * @Rest\Delete("/auth-tokens/{id}")
+     * @param Request $request
+     */
+    public function removeAuthTokenAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $authToken = $em->getRepository('AppBundle:AuthToken')
+            ->find($request->get('id'));
+        /* @var $authToken AuthToken */
+
+        $connectedUser = $this->get('security.token_storage')->getToken()->getUser();
+
+        if ($authToken && $authToken->getUser()->getId() === $connectedUser->getId()) {
+            $em->remove($authToken);
+            $em->flush();
+        } else {
+            throw new BadRequestHttpException('Bad Request');
+            // todo : Pourquoi message pas compris dans BadRequestHttpException ?
+            //On ne le config pas dans config.yml ??
+        }
     }
 }
