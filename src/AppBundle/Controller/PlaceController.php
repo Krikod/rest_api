@@ -11,27 +11,67 @@ use FOS\RestBundle\View\View; // Utilisation de la vue de FOSRestBundle
 use FOS\RestBundle\Controller\Annotations as Rest; // Alias pour toutes les annotations
 use AppBundle\Form\PlaceType;
 use AppBundle\Entity\Place;
+use FOS\RestBundle\Controller\Annotations\QueryParam;
+use FOS\RestBundle\Request\ParamFetcher;
 
 
 class PlaceController extends Controller
 {
+    // Pagination avec 2 query strings pour choisir index du 1er résultat voulu (offset) et nbre résults
+    // (params facultatifs mais doivent etre entiers +).
+    // Pour traiter la validation des paramètres de ***requirements*** (validés par l'expr.régulière),
+    // on peut (y a d'autres méthodes) ajouter un param à l'action du type  ***FOS\RestBundle\Request\ParamFetcher***:
+    // => Le Param Fetcher Listener injecte automatiquement le param fetcher à notre place->L’objet ainsi obtenu permet
+    // d’accéder aux différents query strings que nous avons déclarés
+    // => on peut récupérer les params et les traiter comme on veut (voir haut de la méthode les ajouts)
+    // => Pour gérer la pagination avec Doctrine, on peut utiliser le query builder (qb) avec les param offset et limit.
     /**
      *
      * @Rest\View(serializerGroups={"place"})
      * @Rest\Get("/places")
+     * @QueryParam(name="offset", requirements="\d+", default="", description="Index de début de la pagination")
+     * @QueryParam(name="limit", requirements="\d+", default="", description="Index de fin de la pagination")
      * @param Request $request
      * @return Place[]|array
      */
-    public function getPlacesAction (Request $request)
+    public function getPlacesAction (Request $request, ParamFetcher $paramFetcher)
     {
-        $places = $this->getDoctrine()
-            ->getRepository('AppBundle:Place')
-            ->findAll();
-        /* @var $places Place[] */
+        $offset = $paramFetcher->get('offset');
+        $limit = $paramFetcher->get('limit');
+
+//      // On utilise le Query Builder de Doctrine
+        $qb = $this->getDoctrine()->getManager()->createQueryBuilder();
+        $qb->select('p')
+            ->from('AppBundle:Place', 'p');
+
+        if ($offset != "") {
+            $qb->setFirstResult($offset);
+        }
+
+        if ($limit != "") {
+            $qb->setMaxResults($limit);
+        }
+
+        $places = $qb->getQuery()->getResult();
+
+        return $places;
+        // => on peut tester ***GET rest-api.local/places?offset=1&limit=2***
+//    Tester plusieurs appels API :
+//
+//    GET rest-api.local/places?limit=5 -------- permet de lister cinq lieux ;
+//    GET rest-api.local/places?offset=3 ------- permet de lister tous les lieux en omettant les trois premiers lieux ;
+//    GET rest-api.local/places?offset=1&limit=2 permet de lister deux lieux en omettant le premier lieu dans l’application.
+
+
+// Avant le Query Builder, on avait ->findAll().
+//        $places = $this->getDoctrine()
+//            ->getRepository('AppBundle:Place')
+//            ->findAll();
+//        /* @var $places Place[] */
+//        return $places;
 // Vu que maintenant nous n’avons plus à définir le format dans les actions de nos contrôleurs, nous avons même la
 // possibilité de renvoyer directement nos objets sans utiliser l’objet View de FOSRestBundle.
 
-        return $places;
 
         // Avec nos objets actuels (accesseurs en visibilité public), le sérialiseur de Symfony peut les transformer
         // pour nous. Au lieu de passer un tableau formaté par nos soins, nous allons passer directement une liste

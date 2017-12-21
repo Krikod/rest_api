@@ -119,3 +119,7 @@ fos_rest:
 # Configuration à ajouter pour désactiver le body listener (=false):
     body_listener:
         enabled: true
+    # !!! Pour que FOSRestBundle puisse traiter (gérer) l'annotation QueryParam (-> mis sur actions des contrôleurs),
+    # on active ce listener dédié => on peut donc paginer liste de lieux / trier les réponses (contrôleur Place)
+    param_fetcher_listener:
+        enabled: true
