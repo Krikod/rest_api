@@ -11,7 +11,7 @@ services:
     auth_token_repository:
         class: Doctrine\ORM\EntityManager
         factory: ["@doctrine.orm.entity_manager", "getRepository"]
-        arguments: ["AppBundle:Authtoken"]
+        arguments: ["AppBundle:AuthToken"]
     user_repository:
         class: Doctrine\ORM\EntityManager
         factory: ["@doctrine.orm.entity_manager", "getRepository"]

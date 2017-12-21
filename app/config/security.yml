@@ -21,8 +21,7 @@ security:
             security: false
 
         main:
-#        Pattern trouvé à https://stackoverflow.com/questions/32515191/symfony2-authenticate-users-with-api-key-access-control-issue
-            pattern: /v(\d+\.?\d*)/(?!users)
+            pattern: ^/
 #            Pourquoi dans tuto: ^/ seulement !!!!!!!!!!! ???????????? todo voir Pattern
             stateless: true
             # stateless: true => À chaque requête, l’identité de l’utilisateur est revérifiée.
