@@ -71,6 +71,8 @@ class PreferenceController extends Controller
 
     private function userNotFound()
     {
-        return View::create(['message' => 'User not found'], Response::HTTP_NOT_FOUND);
+        // Dans config.yml, on a activé les message d'exception de HttpException à true
+        throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException('User not found');
+//        return View::create(['message' => 'User not found'], Response::HTTP_NOT_FOUND);
     }
 }

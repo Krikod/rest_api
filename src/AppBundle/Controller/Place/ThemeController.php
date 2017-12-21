@@ -90,6 +90,8 @@ class ThemeController extends Controller
 
     private function placeNotFound()
     {
-        return View::create(['message' => 'Place not found'], Response::HTTP_NOT_FOUND);
+        // Dans config.yml, on a activé les message d'exception de HttpException à true
+        throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException('Place not found');
+//        return View::create(['message' => 'Place not found'], Response::HTTP_NOT_FOUND);
     }
 }

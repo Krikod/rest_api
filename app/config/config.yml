@@ -81,9 +81,25 @@ swiftmailer:
 fos_rest:
     routing_loader:
         include_format: false
+# => Pour faire gérer les exceptions par l'exception listener de FOSRestBundle (à la place du listener du bundle Twig,
+# qui est alors automatiquement désactivé):
+# => Les messages correspondent à ceux définis dans les exceptions parce que l’app est en mode dév.
+# En prod, ils sont remplacés par ***Internal Server Error***.
+    exception:
+        enabled: true
+        # => Pour conserver les messages des exceptions même en production (marche pas... todo exceptions):
+        messages:
+            'Symfony\Component\Security\Core\Exception\BadCredentialsException': true
+            'Symfony\Component\HttpKernel\Exception\HttpException': true
+        # => Pour associer bon code aux erreurs d'authentification (401 Unauthorized) -
+        # À l’instar du tableau messages, rajouter tableau codes avec comme CLES
+        # les exceptions et comme VALEUR les codes de statut associés.
+        # => ne marche qu'avec app_dev.php, pas app.php !!!!!
+        codes:
+            'Symfony\Component\Security\Core\Exception\BadCredentialsException': 401
     view:
         view_response_listener: true
-# on déclare le format des réponses supportées, sans view (mais ces 2 formats osnt déjà
+# on déclare le format des réponses supportées, sans view (mais ces 2 formats ont déjà
 # activés par défaut (inscrits pour clarté)
         formats:
             json: true

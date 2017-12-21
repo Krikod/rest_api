@@ -202,7 +202,11 @@ class PlaceController extends Controller
        if (empty($place)) {
            // Au lieu de renvoyer une réponse JSON, on va juste renvoyer une vue FOSRestBundle et laisser
            // le view handler le formater en JSON -> on pourra + tard changer le format des réponses(XML..).
-           return View::create(['message' => 'Place not found'], Response::HTTP_NOT_FOUND);
+
+           // Dans config.yml, on a activé les message d'exception de HttpException à true
+           throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException('Place not found');
+//           return View::create(['message' => 'Place not found'], Response::HTTP_NOT_FOUND);
+
             // Utilisation d'un objet JsonResponse qd ressource recherchée n’existe pas:
             //           return new JsonResponse(['message' => 'Place not found'], Response::HTTP_NOT_FOUND);
        }

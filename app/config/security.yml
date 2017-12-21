@@ -22,7 +22,6 @@ security:
 
         main:
             pattern: ^/
-#            Pourquoi dans tuto: ^/ seulement !!!!!!!!!!! ???????????? todo voir Pattern
             stateless: true
             # stateless: true => À chaque requête, l’identité de l’utilisateur est revérifiée.
             # La session n’est jamais utilisée.
