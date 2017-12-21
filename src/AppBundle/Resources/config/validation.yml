@@ -16,6 +16,10 @@ AppBundle\Entity\Place:
         prices:
             - Valid: ~
 # => Ajouter la contrainte UniqueEntity "name" en annotation dans l'Entity Place
+            - AppBundle\Form\Validator\Constraint\PriceTypeUnique: ~
+            # On a ainsi modifié les règles de validation d'un lieu (ajout ligne)
+            # pour utiliser la contrainte créée / validator
+            # => on aura donc une erreur de validation avec un message clair.
 
 AppBundle\Entity\User:
     constraints:

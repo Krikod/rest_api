@@ -12,6 +12,10 @@ use Doctrine\ORM\Mapping as ORM;
  *     uniqueConstraints={@ORM\UniqueConstraint(name="prices_type_place_unique",
  *     columns={"type", "place_id"})})
  * @ORM\Entity(repositoryClass="AppBundle\Repository\PriceRepository")
+ *
+// => Si nous créons un lieu avec des prix du même type, on a une erreur interne
+ * car il y a une contrainte d’unicité sur l’identifiant du lieu et le type du produit.
+ * => créer une règle de validation personnalisée (AppBundle/Form/Validator/Constraint/PriceTypeUnique.php)!!
  */
 class Price
 {

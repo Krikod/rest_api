@@ -54,6 +54,7 @@ class Place
 
 // todo !!! Nous pouvons maintenant créer un lieu tout en rajoutant des prix et le principe peut même être élargi
 // pour les THEMES des lieux et les PREFERENCES des utilisateurs.
+// Cela dépend peu de REST mais de la gestion des formulaires Symfony.
     public function __construct()
     {
         $this->prices = new ArrayCollection();
