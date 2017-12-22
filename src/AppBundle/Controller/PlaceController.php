@@ -31,6 +31,7 @@ class PlaceController extends Controller
      * @Rest\Get("/places")
      * @QueryParam(name="offset", requirements="\d+", default="", description="Index de début de la pagination")
      * @QueryParam(name="limit", requirements="\d+", default="", description="Index de fin de la pagination")
+     * @QueryParam(name="sort", requirements="asc|desc", nullable=true, description="Ordre de tri (basé sur le nom)")
      * @param Request $request
      * @return Place[]|array
      */
@@ -38,6 +39,7 @@ class PlaceController extends Controller
     {
         $offset = $paramFetcher->get('offset');
         $limit = $paramFetcher->get('limit');
+        $sort = $paramFetcher->get('sort');
 
 //      // On utilise le Query Builder de Doctrine
         $qb = $this->getDoctrine()->getManager()->createQueryBuilder();
@@ -51,6 +53,14 @@ class PlaceController extends Controller
         if ($limit != "") {
             $qb->setMaxResults($limit);
         }
+
+        if (in_array($sort, ['asc', 'desc'])) {
+            $qb->orderBy('p.name', $sort);
+        }
+        // test sur /places?offset=1&limit=2&sort=desc
+        // (Il est aussi possible de configuer FOSRestBundle pour injecter
+        // directement les query strings dans l’objet Request + autres fonctionnalités. Voir doc du bundle
+        // http://symfony.com/doc/master/bundles/FOSRestBundle/param_fetcher_listener.html)
 
         $places = $qb->getQuery()->getResult();
 

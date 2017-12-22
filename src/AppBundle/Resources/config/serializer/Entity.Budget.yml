@@ -1,0 +1,13 @@
+# src/AppBundle/Resources/config/serializer/Entity.Budget.yml
+
+AppBundle\Entity\Budget:
+    exclusion_policy: none
+    properties:
+        id:
+            groups: ['user', 'budget']
+        scope:
+            groups: ['user', 'budget']
+        value:
+            groups: ['user', 'budget']
+        user:
+            groups: ['budget']

@@ -1,0 +1,17 @@
+# src/AppBundle/Resources/config/serializer/Entity.User.yml
+
+AppBundle\Entity\User:
+    exclusion_policy: none
+    properties:
+        id:
+            groups: ['user', 'preference', 'budget', 'auth-token']
+        firstname:
+            groups: ['user', 'preference', 'budget', 'auth-token']
+        lastname:
+            groups: ['user', 'preference', 'budget', 'auth-token']
+        email:
+            groups: ['user', 'preference', 'budget', 'auth-token']
+        preferences:
+            groups: ['user']
+        budget:
+            groups: ['user']

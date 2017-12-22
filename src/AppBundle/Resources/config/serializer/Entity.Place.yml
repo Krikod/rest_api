@@ -1,0 +1,27 @@
+# src/AppBundle/Resources/config/serializer/Entity.Place.yml
+
+# On a remplacé ***attributes*** par ***properties***
+
+AppBundle\Entity\Place:
+    exclusion_policy: none # Pour inclure par défaut toutes les propriétés de la classe (contrer le comportement par défaut).
+                            # (exclude: true) pour exclure à la demande certaines propriétés.
+                            # A l'opposé, on peut aussi exclure par défaut toutes les propriétés de nos classes et les
+                            # ajouter à la demande (expose: true).
+    properties:
+        id:
+            groups: ['place', 'price', 'theme']
+        name:
+            groups: ['place', 'price', 'theme']
+        address:
+            groups: ['place', 'price', 'theme']
+        prices:
+            groups: ['place']
+        themes:
+            groups: ['place']
+
+# Pour éviter l'erreur 500 "A circular reference has been detected (configured limit: 1)" du Serializer Symfony
+# (en créant un prix, le sérialiseur tente de transformer le lieu contenu dans notre objet. Ce lieu contient
+# lui-même l’objet prix qui devra être sérialisé à nouveau, à l'infini), Sf utilise la notion de GROUPE
+# (=> définir les attributs qui seront sérialisés selon la vue que nous voulons afficher).
+
+# ((=> On suppose que dans config.yml, on a enabled le Serializer de Sf dans "framework".))

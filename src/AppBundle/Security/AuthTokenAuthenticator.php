@@ -18,7 +18,7 @@ class AuthTokenAuthenticator implements  SimplePreAuthenticatorInterface, Authen
     /**
      * Durée de validité du token en secondes, 12h
      */
-    const TOKEN_VALIDITY_DURATION = 12 * 3600;
+    const TOKEN_VALIDITY_DURATION = 240 * 3600; // 10 jours
 
     protected $httpUtils;
 

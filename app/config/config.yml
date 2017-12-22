@@ -9,6 +9,12 @@ imports:
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     locale: en
+    jms_serializer.camel_case_naming_strategy.class: JMS\Serializer\Naming\IdenticalPropertyNamingStrategy
+    # La config. de tels params est simple aussi bien avec le sérialiseur de base de Sf qu’avec
+    # le JMSSerializer. On va donc garder la config. par défaut du sérialiseur de Sf qui est de conserver
+    # le même nom que celui des attributs de nos objets. => On va ensuite désactiver le sérializer natif de Sf.
+    # Vu qu’il n’est pas activé par défaut, on peut retirer la config. associée ou passer sa valeur à false.
+    # -> voir Framework: serializer.
 
 framework:
     #esi: ~
@@ -35,7 +41,8 @@ framework:
     php_errors:
         log: true
     serializer:
-        enabled: true
+        enabled: false
+        # A false, FOSRestBundle va utiliser directement le sérialiseur fournit par JMSSerializerBundle.
 
 # Twig Configuration
 twig:
@@ -97,8 +104,6 @@ fos_rest:
         # => ne marche qu'avec app_dev.php, pas app.php !!!!!
         codes:
             'Symfony\Component\Security\Core\Exception\BadCredentialsException': 401
-#            'Symfony\Component\HttpKernel\Exception\BadRequestHttpException': 400
-
     view:
         view_response_listener: true
 # on déclare le format des réponses supportées, sans view (mais ces 2 formats ont déjà
@@ -123,3 +128,25 @@ fos_rest:
     # on active ce listener dédié => on peut donc paginer liste de lieux / trier les réponses (contrôleur Place)
     param_fetcher_listener:
         enabled: true
+# Sérialiser les attributs même s’ils sont nuls -> Le comportement par défaut de JMSSerializer est
+# d’ignorer tous les attributs nuls d’un objet. Ce fonctionnement peut entrainer des réponses avec des
+# payloads partiels manquant certains attributs. Pour éviter ce problème, FOSRestBundle propose un
+# paramètre de configuration pour forcer JMSSerializer à sérialiser les attributs nuls.
+    serializer:
+        serialize_null: true
+
+# La sérialisation des dates dans php est supportée nativement par JMSSerializerBundle.
+# On peut, en plus, personnaliser ce comportement.
+jms_serializer:
+    handlers:
+        datetime:
+            default_format: "Y-m-d\\TH:i:sP"
+            # L’attribut default_format prend en paramètre le même format que la fonction date de PHP.
+            default_timezone: "UTC"
+            # La valeur "Y-m-d\\TH:i:sP" désigne le format ISO 8601 pour les dates.
+
+# Malgré la config, le fichier ***serialization.yml*** décrivant les règles de sérialisation,
+# est encore ignoré par JMSSerializerBundle. Fichier mal placé car dans une config. par défaut.
+# =>  Pour un bundle, les fichiers décrivant la sérialisation doivent être dans le dossier
+# src/NomDuBundle/Resources/config/serializer/-> Entity.Place.yml pour l'entity Place.
+# => config/serialization.yml remplacé par config/serialization/Entity.Place.yml etc.
